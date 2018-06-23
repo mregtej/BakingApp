@@ -1,0 +1,101 @@
+package com.udacity.mregtej.bakingapp.repository;
+
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
+import android.util.Log;
+
+import com.udacity.mregtej.bakingapp.application.BakingAppExecutors;
+import com.udacity.mregtej.bakingapp.datamodel.Recipe;
+import com.udacity.mregtej.bakingapp.rest.RecipeApiClient;
+import com.udacity.mregtej.bakingapp.rest.RecipeApiService;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class RecipeRepository {
+
+    //--------------------------------------------------------------------------------|
+    //                                Constants                                       |
+    //--------------------------------------------------------------------------------|
+
+    private static final String TAG = RecipeRepository.class.getName();
+
+
+    //--------------------------------------------------------------------------------|
+    //                                  Params                                        |
+    //--------------------------------------------------------------------------------|
+
+    private static RecipeRepository INSTANCE;
+
+    private final BakingAppExecutors mExecutors;
+
+    //--------------------------------------------------------------------------------|
+    //                  Constructor (Singleton Pattern)                               |
+    //--------------------------------------------------------------------------------|
+
+    private RecipeRepository(final BakingAppExecutors executors) {
+        mExecutors = executors;
+    }
+
+    public static RecipeRepository getInstance(final BakingAppExecutors executors) {
+        if (INSTANCE == null) {
+            synchronized (RecipeRepository.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = new RecipeRepository(executors);
+                }
+            }
+        }
+        return INSTANCE;
+    }
+
+
+    //--------------------------------------------------------------------------------|
+    //                               Network Requests                                 |
+    //--------------------------------------------------------------------------------|
+
+    public LiveData<List<Recipe>> getRecipes() {
+
+        final MutableLiveData<List<Recipe>> recipes = new MutableLiveData<>();
+
+        //Creating an object of our api interface
+        final RecipeApiService api = RecipeApiClient.getApiService();
+
+        mExecutors.networkIO().execute(new Runnable() {
+
+               @Override
+               public void run() {
+                   /** Calling JSON */
+                   Call<List<Recipe>> call = api.getRecipeJSON();
+
+                   /** Enqueue Callback will be call when get response...*/
+                   call.enqueue(new Callback<List<Recipe>>() {
+                       @Override
+                       public void onResponse(Call<List<Recipe>> call,
+                                              Response<List<Recipe>> response) {
+                           if (response.isSuccessful()) {
+                               List<Recipe> data = new ArrayList<>();
+                               for(int i = 0; i < response.body().size(); i++) {
+                                   data.add(response.body().get(i));
+                               }
+                               recipes.setValue(data);
+                           }
+                       }
+
+                       @Override
+                       public void onFailure(Call<List<Recipe>> call, Throwable t) {
+                           Log.e(TAG, t.toString());
+                           recipes.setValue(null);
+                       }
+                   });
+
+               }
+           });
+
+        return recipes;
+
+    }
+}

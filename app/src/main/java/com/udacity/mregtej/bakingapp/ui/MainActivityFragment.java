@@ -1,5 +1,7 @@
 package com.udacity.mregtej.bakingapp.ui;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -7,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,8 +18,14 @@ import android.view.ViewGroup;
 
 import com.udacity.mregtej.bakingapp.R;
 import com.udacity.mregtej.bakingapp.comm.ConnectivityHandler;
+import com.udacity.mregtej.bakingapp.datamodel.Recipe;
 import com.udacity.mregtej.bakingapp.global.BakingAppGlobals;
+import com.udacity.mregtej.bakingapp.ui.adapter.RecipeCardAdapter;
 import com.udacity.mregtej.bakingapp.ui.dialog.AlertDialogHelper;
+import com.udacity.mregtej.bakingapp.viewmodel.RecipeViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,6 +36,10 @@ public class MainActivityFragment extends Fragment {
     private RecyclerView.LayoutManager mRecipeCardLayoutManager;
     /** Custom Recipe Card GridView (RecyclerView) */
     @BindView(R.id.recipe_card_recyclerview) RecyclerView mRecipeCardRecyclerView;
+    /** Recipe ViewModel instance */
+    private RecipeViewModel mRecipeViewModel;
+    /** Popular films Custom ArrayAdapter */
+    private RecipeCardAdapter mRecipeCardAdapter;
     /** Activity Context */
     private Context mContext;
 
@@ -53,9 +66,11 @@ public class MainActivityFragment extends Fragment {
             mRecipeCardRecyclerView.setHasFixedSize(true);
             setRecyclerViewLayoutManager(rootView);
 
-            // TODO Subscribes MainActivityFragment to receive notifications from RecipeViewModel
+            // Subscribe MainActivityFragment to receive notifications from RecipeViewModel
+            registerToRecipeModel();
 
-            // TODO Enable notifications for receiving updated recipe list from RecipeViewModel
+            // Get recipe list from RecipeViewModel
+            getRecipes();
         }
 
         // Return rootView
@@ -135,6 +150,29 @@ public class MainActivityFragment extends Fragment {
                 break;
         }
         mRecipeCardRecyclerView.setLayoutManager(mRecipeCardLayoutManager);
+    }
+
+    private void registerToRecipeModel() {
+        // Create RecipeViewModel Factory for param injection
+        RecipeViewModel.Factory recipeFactory = new RecipeViewModel.Factory(
+                getActivity().getApplication());
+        // Get instance of RecipeViewModel
+        mRecipeViewModel = ViewModelProviders.of(this, recipeFactory)
+                .get(RecipeViewModel.class);
+    }
+
+    private void getRecipes(){
+        mRecipeViewModel.getRecipes().observe(this, new Observer<List<Recipe>>() {
+            @Override
+            public void onChanged(@Nullable List<Recipe> recipes) {
+                if(recipes == null || recipes.isEmpty()) { return; }
+                else {
+                    mRecipeCardAdapter = new RecipeCardAdapter(recipes);
+                    mRecipeCardRecyclerView.setAdapter(mRecipeCardAdapter);
+                    mRecipeCardAdapter.notifyDataSetChanged();
+                }
+            }
+        });
     }
 
 }
