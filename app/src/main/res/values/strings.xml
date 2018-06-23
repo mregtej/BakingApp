@@ -4,4 +4,12 @@
     <string name="recipe_title">Recipe Name</string>
     <string name="recipe_photo_content_description">Recipe Image</string>
 
+    <!-- Connectivity AlertDialog (Wifi/3G) strings -->
+    <string name="network_failure">Network connection failure</string>
+    <string name="network_user_choice">No active network connection. The application cannot run
+        properly. What would you like to do?</string>
+    <string name="network_user_choice_no">Close App</string>
+    <string name="network_user_choice_3g">Enable 3G</string>
+    <string name="network_user_choice_wifi">Enable Wi-Fi</string>
+
 </resources>
