@@ -123,6 +123,11 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Vi
         holder.recipeName.setText(recipe.getName());
     }
 
+
+    //--------------------------------------------------------------------------------|
+    //                          Fragment--> Activity Comm                             |
+    //--------------------------------------------------------------------------------|
+
     public interface RecipeCardClickListener {
         public void OnRecipeCardClick(int position);
     }

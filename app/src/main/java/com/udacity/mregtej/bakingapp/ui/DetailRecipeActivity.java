@@ -11,6 +11,8 @@ import android.widget.ImageView;
 
 import com.udacity.mregtej.bakingapp.R;
 import com.udacity.mregtej.bakingapp.datamodel.Recipe;
+import com.udacity.mregtej.bakingapp.datamodel.Step;
+import com.udacity.mregtej.bakingapp.ui.adapter.RecipeStepAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,10 +54,10 @@ public class DetailRecipeActivity extends AppCompatActivity {
             // Set recipe name as Activity title
             mActionBar.setTitle(mRecipe.getName());
 
-            // TODO Create Recipe Fragments (Populate UI)
+            // Create Recipe Fragments (Populate UI)
             populateUIFragments();
 
-            // TODO Add Collapse/Expand clickListeners
+            // Add Collapse/Expand clickListeners
             setCollapseViewClickListeners();
 
         }
@@ -85,6 +87,7 @@ public class DetailRecipeActivity extends AppCompatActivity {
                         findFragmentById(R.id.fr_detail_recipe_steps_fragment);
         if(mDetailRecipeStepsFragment != null) {
             mDetailRecipeStepsFragment.setRecipeSteps(mRecipe.getSteps());
+            mDetailRecipeStepsFragment.setmRecipeName(mRecipe.getName());
         }
 
         // RecyclerViews expanded by default

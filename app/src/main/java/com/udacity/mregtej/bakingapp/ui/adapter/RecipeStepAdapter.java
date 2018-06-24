@@ -20,10 +20,21 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepAdapter.Vi
 
     List<Step> mRecipeSteps;
     private Context mContext;
+    private RecipeStepClickListener mRecipeStepClickListener;
 
-    public RecipeStepAdapter(List<Step> ingredients) {
+    //--------------------------------------------------------------------------------|
+    //                                 Constructors                                   |
+    //--------------------------------------------------------------------------------|
+
+    public RecipeStepAdapter(List<Step> ingredients, RecipeStepClickListener listener) {
         this.mRecipeSteps = ingredients;
+        this.mRecipeStepClickListener = listener;
     }
+
+
+    //--------------------------------------------------------------------------------|
+    //                               Override Methods                                 |
+    //--------------------------------------------------------------------------------|
 
     @NonNull
     @Override
@@ -46,17 +57,34 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepAdapter.Vi
         // Populate UI elements
         populateUIView(holder, recipeStep, position);
 
-        // TODO SetOnViewClickListener
+        // Set RecipeCard OnClickListener
+        setOnViewClickListener(holder);
 
     }
+
+
+    //--------------------------------------------------------------------------------|
+    //                                Getters / Setters                               |
+    //--------------------------------------------------------------------------------|
 
     @Override
     public int getItemCount() {
         return mRecipeSteps.size();
     }
 
+    public List<Step> getmRecipeSteps() { return mRecipeSteps; }
+
     public void setmRecipeSteps(List<Step> mRecipeSteps) {
         this.mRecipeSteps = mRecipeSteps;
+    }
+
+
+    //--------------------------------------------------------------------------------|
+    //                          Fragment--> Activity Comm                             |
+    //--------------------------------------------------------------------------------|
+
+    public interface RecipeStepClickListener {
+        public void OnRecipeStepClick(int position);
     }
 
 
@@ -89,6 +117,27 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepAdapter.Vi
         holder.recipeStepNumber.setText(String.valueOf(position));
         // Set Recipe Step shortDescription
         holder.recipeStepDescription.setText(recipeStep.getShortDescription());
+    }
+
+
+    //--------------------------------------------------------------------------------|
+    //                              Support Methods                                   |
+    //--------------------------------------------------------------------------------|
+
+    /**
+     * Set a film click-listener on the film-view
+     *
+     * @param    holder    ViewHolder (View container)
+     */
+    private void setOnViewClickListener(final ViewHolder holder) {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mRecipeStepClickListener != null) {
+                    mRecipeStepClickListener.OnRecipeStepClick((int)v.getTag());
+                }
+            }
+        });
     }
 
 }

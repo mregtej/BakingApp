@@ -10,6 +10,8 @@
     <string name="recipe_step_description_title">Recipe Steps</string>
     <string name="recipe_step_number">#</string>
     <string name="recipe_step_description">Recipe Step Descripion</string>
+    <string name="previous_recipe_step">Prev Step</string>
+    <string name="next_recipe_step">Next Step</string>
 
     <!-- Connectivity AlertDialog (Wifi/3G) strings -->
     <string name="network_failure">Network connection failure</string>

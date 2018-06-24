@@ -1,6 +1,7 @@
 package com.udacity.mregtej.bakingapp.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,12 +18,18 @@ import com.udacity.mregtej.bakingapp.global.BakingAppGlobals;
 import com.udacity.mregtej.bakingapp.ui.adapter.RecipeStepAdapter;
 import com.udacity.mregtej.bakingapp.ui.utils.ViewUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DetailRecipeStepsFragment extends Fragment {
+public class DetailRecipeStepsFragment extends Fragment
+        implements RecipeStepAdapter.RecipeStepClickListener {
+
+    private static final String RECIPE_NAME_EXTRA = "recipe-name";
+    private static final String RECIPE_STEPS_EXTRA = "recipe-step";
+    private static final String RECIPE_STEP_POSITION_EXTRA = "recipe-step-position";
 
     /** RecyclerView LayoutManager instance */
     private RecyclerView.LayoutManager mRecipeStepsLayoutManager;
@@ -32,6 +39,8 @@ public class DetailRecipeStepsFragment extends Fragment {
     @BindView(R.id.recipe_step_description_recyclerview) RecyclerView mRecipeStepsRecyclerView;
     /** Activity Context */
     private Context mContext;
+
+    private String mRecipeName;
 
     private View rootView;
 
@@ -49,7 +58,7 @@ public class DetailRecipeStepsFragment extends Fragment {
         mContext = rootView.getContext();
 
         // Create RecipeCardAdapter (null recipes)
-        mRecipeStepsAdapter = new RecipeStepAdapter(null);
+        mRecipeStepsAdapter = new RecipeStepAdapter(null,this);
 
         // Load & set GridLayout
         mRecipeStepsRecyclerView.setHasFixedSize(true);
@@ -60,6 +69,9 @@ public class DetailRecipeStepsFragment extends Fragment {
 
     }
 
+    public void setmRecipeName(String mRecipeName) {
+        this.mRecipeName = mRecipeName;
+    }
 
     public void setRecipeSteps(List<Step> recipeSteps) {
         mRecipeStepsAdapter.setmRecipeSteps(recipeSteps);
@@ -96,5 +108,17 @@ public class DetailRecipeStepsFragment extends Fragment {
                 break;
         }
         mRecipeStepsRecyclerView.setLayoutManager(mRecipeStepsLayoutManager);
+    }
+
+    @Override
+    public void OnRecipeStepClick(int position) {
+        Intent i = new Intent(mContext, RecipeStepDetailViewActivity.class);
+        ArrayList<Step> recipeSteps = (ArrayList<Step>) mRecipeStepsAdapter.getmRecipeSteps();
+        if(recipeSteps != null) {
+            i.putExtra(RECIPE_NAME_EXTRA, mRecipeName);
+            i.putParcelableArrayListExtra(RECIPE_STEPS_EXTRA, recipeSteps);
+            i.putExtra(RECIPE_STEP_POSITION_EXTRA, position);
+        }
+        this.startActivity(i);
     }
 }

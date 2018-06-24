@@ -27,6 +27,13 @@
                 android:value=".ui.MainActivity" />
         </activity>
 
+        <activity android:name=".ui.RecipeStepDetailViewActivity"
+            android:parentActivityName=".ui.DetailRecipeActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.DetailRecipeActivity" />
+        </activity>
+
     </application>
 
 </manifest>
