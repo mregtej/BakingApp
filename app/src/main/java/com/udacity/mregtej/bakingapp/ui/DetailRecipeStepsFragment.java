@@ -15,6 +15,7 @@ import com.udacity.mregtej.bakingapp.R;
 import com.udacity.mregtej.bakingapp.datamodel.Step;
 import com.udacity.mregtej.bakingapp.global.BakingAppGlobals;
 import com.udacity.mregtej.bakingapp.ui.adapter.RecipeStepAdapter;
+import com.udacity.mregtej.bakingapp.ui.utils.ViewUtils;
 
 import java.util.List;
 
@@ -32,6 +33,8 @@ public class DetailRecipeStepsFragment extends Fragment {
     /** Activity Context */
     private Context mContext;
 
+    private View rootView;
+
     public DetailRecipeStepsFragment() { }
 
     @Nullable
@@ -40,7 +43,7 @@ public class DetailRecipeStepsFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
 
         // Bind Views
-        View rootView = inflater.inflate(R.layout.fragment_recipe_steps, container,
+        rootView = inflater.inflate(R.layout.fragment_recipe_steps, container,
                 false);
         ButterKnife.bind(this, rootView);
         mContext = rootView.getContext();
@@ -62,6 +65,14 @@ public class DetailRecipeStepsFragment extends Fragment {
         mRecipeStepsAdapter.setmRecipeSteps(recipeSteps);
         mRecipeStepsRecyclerView.setAdapter(mRecipeStepsAdapter);
         mRecipeStepsAdapter.notifyDataSetChanged();
+    }
+
+    public void setRecyclerViewVisibility(boolean isExpanded) {
+        if(isExpanded) {
+            ViewUtils.collapseView(rootView);
+        } else {
+            ViewUtils.expandView(rootView);
+        }
     }
 
     /**

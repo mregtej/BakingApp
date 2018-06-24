@@ -1,20 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:layout_editor_absoluteY="81dp">
+
+    <TextView
+        android:id="@+id/tv_ingredients_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginVertical="8dp"
+        android:fontFamily="sans-serif"
+        android:gravity="center_horizontal"
+        android:text="@string/ingredient_title"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toStartOf="@+id/ib_expand_collapse_ingredients_rv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ib_expand_collapse_ingredients_rv"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="8dp"
+        android:src="@mipmap/ic_collapse"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_ingredients_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_ingredients_title"
+        app:layout_constraintVertical_bias="0.473" />
+
+    <View
+        android:id="@+id/v_ingredients_title_separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:background="@android:color/black"
+        app:layout_constraintEnd_toEndOf="@+id/ib_expand_collapse_ingredients_rv"
+        app:layout_constraintStart_toStartOf="@+id/tv_ingredients_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_ingredients_title" />
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/fr_detail_recipe_ingredients_fragment"
         android:name="com.udacity.mregtej.bakingapp.ui.DetailRecipeIngredientsFragment"
         android:layout_width="match_parent"
-        android:layout_height="140dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toEndOf="@+id/ib_expand_collapse_ingredients_rv"
+        app:layout_constraintStart_toStartOf="@+id/tv_ingredients_title"
+        app:layout_constraintTop_toBottomOf="@+id/v_ingredients_title_separator"
         tools:context=".ui.DetailRecipeActivity"
         tools:layout="@layout/fragment_recipe_ingredients" />
+
+    <View
+        android:id="@+id/v_ingredients_list_separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@android:color/black"
+        app:layout_constraintEnd_toEndOf="@+id/ib_expand_collapse_ingredients_rv"
+        app:layout_constraintStart_toStartOf="@+id/tv_ingredients_title"
+        app:layout_constraintTop_toBottomOf="@+id/fr_detail_recipe_ingredients_fragment" />
+
+    <TextView
+        android:id="@+id/tv_step_description_title"
+        android:layout_width="0dp"
+        android:layout_height="29dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginVertical="8dp"
+        android:fontFamily="sans-serif"
+        android:gravity="center_horizontal"
+        android:text="@string/recipe_step_description_title"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toStartOf="@+id/ib_expand_collapse_steps_rv"
+        app:layout_constraintStart_toStartOf="@+id/tv_ingredients_title"
+        app:layout_constraintTop_toBottomOf="@+id/fr_detail_recipe_ingredients_fragment" />
+
+    <ImageView
+        android:id="@+id/ib_expand_collapse_steps_rv"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="8dp"
+        android:src="@mipmap/ic_collapse"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_step_description_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_step_description_title" />
+
+    <View
+        android:id="@+id/v_steps_title_separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:background="@android:color/black"
+        app:layout_constraintEnd_toEndOf="@+id/ib_expand_collapse_ingredients_rv"
+        app:layout_constraintStart_toStartOf="@+id/tv_ingredients_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_step_description_title" />
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -22,8 +115,24 @@
         android:name="com.udacity.mregtej.bakingapp.ui.DetailRecipeStepsFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toEndOf="@+id/ib_expand_collapse_ingredients_rv"
+        app:layout_constraintStart_toStartOf="@+id/tv_ingredients_title"
+        app:layout_constraintTop_toBottomOf="@+id/v_steps_title_separator"
         tools:context=".ui.DetailRecipeActivity"
         tools:layout="@layout/fragment_recipe_steps" />
 
-</LinearLayout>
+    <View
+        android:id="@+id/v_steps_list_separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@android:color/black"
+        app:layout_constraintEnd_toEndOf="@+id/ib_expand_collapse_ingredients_rv"
+        app:layout_constraintStart_toStartOf="@+id/tv_ingredients_title"
+        app:layout_constraintTop_toBottomOf="@+id/fr_detail_recipe_steps_fragment" />
+
+</android.support.constraint.ConstraintLayout>
