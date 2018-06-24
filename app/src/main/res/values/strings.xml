@@ -2,7 +2,14 @@
     <string name="app_name">BakingApp</string>
 
     <string name="recipe_title">Recipe Name</string>
+    <string name="ingredient_title">Ingredients</string>
+    <string name="ingredient_name">Ingredient Name</string>
+    <string name="ingredient_quantity">Quantity</string>
     <string name="recipe_photo_content_description">Recipe Image</string>
+    <string name="recipe_ingredient_content_description">Recipe Ingredient</string>
+    <string name="recipe_step_description_title">Recipe Steps</string>
+    <string name="recipe_step_number">#</string>
+    <string name="recipe_step_description">Recipe Step Descripion</string>
 
     <!-- Connectivity AlertDialog (Wifi/3G) strings -->
     <string name="network_failure">Network connection failure</string>

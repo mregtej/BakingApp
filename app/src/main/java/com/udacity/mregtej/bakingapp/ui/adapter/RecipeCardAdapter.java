@@ -111,6 +111,7 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Vi
      * @param recipe    Recipe object
      */
     private void populateUIView(ViewHolder holder, Recipe recipe) {
+        // TODO Fill image with Recipe.Image data from DataModel
         Picasso
                 .with(mContext)
                 .load(R.drawable.im_baking)
@@ -118,7 +119,7 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Vi
                 .centerCrop()
                 // .error(R.drawable.im_image_not_available)
                 .into(holder.recipePhoto);
-        // Set title of TMDBFilm
+        // Set Recipe name
         holder.recipeName.setText(recipe.getName());
     }
 

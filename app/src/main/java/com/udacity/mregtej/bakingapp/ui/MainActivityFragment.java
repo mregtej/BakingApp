@@ -39,7 +39,7 @@ public class MainActivityFragment extends Fragment
     @BindView(R.id.recipe_card_recyclerview) RecyclerView mRecipeCardRecyclerView;
     /** Recipe ViewModel instance */
     private RecipeViewModel mRecipeViewModel;
-    /** Popular films Custom ArrayAdapter */
+    /** Recipe Card Custom ArrayAdapter */
     private RecipeCardAdapter mRecipeCardAdapter;
     /** Activity Context */
     private Context mContext;

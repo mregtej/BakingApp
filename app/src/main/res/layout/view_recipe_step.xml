@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:layout_margin="1dp"
+    android:background="@drawable/dr_rectangle">
+
+    <TextView
+        android:id="@+id/tv_recipe_step_number"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="sans-serif"
+        android:gravity="center_horizontal"
+        android:maxLines="1"
+        android:text="@string/recipe_step_number"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_recipe_step_description"
+        android:layout_width="0dp"
+        android:layout_height="31dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="sans-serif"
+        android:maxLines="2"
+        android:text="@string/recipe_step_description"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_recipe_step_number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_recipe_step_number"
+        app:layout_constraintTop_toTopOf="@+id/tv_recipe_step_number"
+        app:layout_constraintVertical_bias="0.888" />
+
+</android.support.constraint.ConstraintLayout>

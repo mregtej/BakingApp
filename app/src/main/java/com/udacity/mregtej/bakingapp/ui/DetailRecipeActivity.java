@@ -19,6 +19,9 @@ public class DetailRecipeActivity extends AppCompatActivity {
     private Recipe mRecipe;
     private ActionBar mActionBar;
 
+    private DetailRecipeIngredientsFragment mDetailRecipeIngredientsFragment;
+    private DetailRecipeStepsFragment mDetailRecipeStepsFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -39,7 +42,9 @@ public class DetailRecipeActivity extends AppCompatActivity {
 
             // Set recipe name as Activity title
             mActionBar.setTitle(mRecipe.getName());
+
             // TODO Create Recipe Fragments (Populate UI)
+            populateUIFragments();
 
         }
 
@@ -54,6 +59,21 @@ public class DetailRecipeActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void populateUIFragments() {
+        mDetailRecipeIngredientsFragment = (DetailRecipeIngredientsFragment)
+                getSupportFragmentManager().
+                        findFragmentById(R.id.fr_detail_recipe_ingredients_fragment);
+        if(mDetailRecipeIngredientsFragment != null) {
+            mDetailRecipeIngredientsFragment.setRecipeIngredients(mRecipe.getIngredients());
+        }
+        mDetailRecipeStepsFragment = (DetailRecipeStepsFragment)
+                getSupportFragmentManager().
+                        findFragmentById(R.id.fr_detail_recipe_steps_fragment);
+        if(mDetailRecipeStepsFragment != null) {
+            mDetailRecipeStepsFragment.setRecipeSteps(mRecipe.getSteps());
+        }
     }
 
 }
