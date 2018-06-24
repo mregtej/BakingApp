@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -24,13 +23,15 @@ import com.udacity.mregtej.bakingapp.ui.adapter.RecipeCardAdapter;
 import com.udacity.mregtej.bakingapp.ui.dialog.AlertDialogHelper;
 import com.udacity.mregtej.bakingapp.viewmodel.RecipeViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivityFragment extends Fragment {
+public class MainActivityFragment extends Fragment
+        implements RecipeCardAdapter.RecipeCardClickListener {
+
+    private static final String RECIPE_EXTRA = "recipe";
 
     /** RecyclerView LayoutManager instance */
     private RecyclerView.LayoutManager mRecipeCardLayoutManager;
@@ -61,6 +62,9 @@ public class MainActivityFragment extends Fragment {
         }
 
         else {
+
+            // Create RecipeCardAdapter (null recipes)
+            mRecipeCardAdapter = new RecipeCardAdapter(null, this);
 
             // Load & set GridLayout
             mRecipeCardRecyclerView.setHasFixedSize(true);
@@ -167,7 +171,7 @@ public class MainActivityFragment extends Fragment {
             public void onChanged(@Nullable List<Recipe> recipes) {
                 if(recipes == null || recipes.isEmpty()) { return; }
                 else {
-                    mRecipeCardAdapter = new RecipeCardAdapter(recipes);
+                    mRecipeCardAdapter.setmRecipeList(recipes);
                     mRecipeCardRecyclerView.setAdapter(mRecipeCardAdapter);
                     mRecipeCardAdapter.notifyDataSetChanged();
                 }
@@ -175,4 +179,17 @@ public class MainActivityFragment extends Fragment {
         });
     }
 
+    //--------------------------------------------------------------------------------|
+    //                           Adapter --> Fragment comm                            |
+    //--------------------------------------------------------------------------------|
+
+    @Override
+    public void OnRecipeCardClick(int position) {
+        Intent i = new Intent(mContext, DetailRecipeActivity.class);
+        Recipe recipe = mRecipeCardAdapter.getRecipeByPosition(position);
+        if(recipe != null) {
+            i.putExtra(RECIPE_EXTRA, recipe);
+        }
+        this.startActivity(i);
+    }
 }

@@ -2,7 +2,6 @@ package com.udacity.mregtej.bakingapp.ui.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,10 +22,22 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Vi
 
     private List<Recipe> mRecipeList;
     private Context mContext;
+    private RecipeCardClickListener mRecipeCardClickListener;
 
-    public RecipeCardAdapter(List<Recipe> recipes) {
+
+    //--------------------------------------------------------------------------------|
+    //                                 Constructors                                   |
+    //--------------------------------------------------------------------------------|
+
+    public RecipeCardAdapter(List<Recipe> recipes, RecipeCardClickListener listener) {
         this.mRecipeList = recipes;
+        this.mRecipeCardClickListener = listener;
     }
+
+
+    //--------------------------------------------------------------------------------|
+    //                              Override Methods                                  |
+    //--------------------------------------------------------------------------------|
 
     @NonNull
     @Override
@@ -40,6 +51,7 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
         // Retrieve Recipe data from Model object
         Recipe recipe = mRecipeList.get(position);
 
@@ -48,6 +60,10 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Vi
 
         // Populate UI elements
         populateUIView(holder, recipe);
+
+        // Set RecipeCard OnClickListener
+        setOnViewClickListener(holder);
+
     }
 
     @Override
@@ -55,9 +71,19 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Vi
         return mRecipeList.size();
     }
 
-    public void setmRecipeList(List<Recipe> mRecipeList) {
-        this.mRecipeList = mRecipeList;
-    }
+
+    //--------------------------------------------------------------------------------|
+    //                             Getters / Setters                                  |
+    //--------------------------------------------------------------------------------|
+
+    public Recipe getRecipeByPosition(int position) { return mRecipeList.get(position); }
+
+    public void setmRecipeList(List<Recipe> mRecipeList) { this.mRecipeList = mRecipeList; }
+
+
+    //--------------------------------------------------------------------------------|
+    //                              Support Classes                                   |
+    //--------------------------------------------------------------------------------|
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -72,6 +98,11 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Vi
         }
 
     }
+
+
+    //--------------------------------------------------------------------------------|
+    //                                 UI Methods                                     |
+    //--------------------------------------------------------------------------------|
 
     /**
      * Populate UI view elements
@@ -89,6 +120,31 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Vi
                 .into(holder.recipePhoto);
         // Set title of TMDBFilm
         holder.recipeName.setText(recipe.getName());
+    }
+
+    public interface RecipeCardClickListener {
+        public void OnRecipeCardClick(int position);
+    }
+
+
+    //--------------------------------------------------------------------------------|
+    //                              Support Methods                                   |
+    //--------------------------------------------------------------------------------|
+
+    /**
+     * Set a film click-listener on the film-view
+     *
+     * @param    holder    ViewHolder (View container)
+     */
+    private void setOnViewClickListener(final ViewHolder holder) {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mRecipeCardClickListener != null) {
+                    mRecipeCardClickListener.OnRecipeCardClick((int)v.getTag());
+                }
+            }
+        });
     }
 
 }
