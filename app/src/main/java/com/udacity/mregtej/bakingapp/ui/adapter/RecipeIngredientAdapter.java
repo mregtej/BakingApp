@@ -50,6 +50,11 @@ public class RecipeIngredientAdapter extends
 
     }
 
+
+    //--------------------------------------------------------------------------------|
+    //                              Getters / Setters                                 |
+    //--------------------------------------------------------------------------------|
+
     @Override
     public int getItemCount() {
         return mIngredients.size();
@@ -58,6 +63,8 @@ public class RecipeIngredientAdapter extends
     public void setmIngredients(List<Ingredient> mIngredients) {
         this.mIngredients = mIngredients;
     }
+
+    public List<Ingredient> getmIngredients() { return mIngredients; }
 
     //--------------------------------------------------------------------------------|
     //                              Support Classes                                   |

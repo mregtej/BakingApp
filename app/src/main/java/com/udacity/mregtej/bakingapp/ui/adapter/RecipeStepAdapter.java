@@ -78,6 +78,7 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepAdapter.Vi
         this.mRecipeSteps = mRecipeSteps;
     }
 
+    public RecipeStepClickListener getmRecipeStepClickListener() { return mRecipeStepClickListener; }
 
     //--------------------------------------------------------------------------------|
     //                          Fragment--> Activity Comm                             |

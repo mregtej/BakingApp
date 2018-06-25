@@ -17,12 +17,15 @@ import com.udacity.mregtej.bakingapp.global.BakingAppGlobals;
 import com.udacity.mregtej.bakingapp.ui.adapter.RecipeIngredientAdapter;
 import com.udacity.mregtej.bakingapp.ui.utils.ViewUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class DetailRecipeIngredientsFragment extends Fragment {
+
+    private static final String RECIPE_INGREDIENTS_SAVED_INST = "ingredients";
 
     /** RecyclerView LayoutManager instance */
     private RecyclerView.LayoutManager mRecipeIngredientsLayoutManager;
@@ -48,16 +51,40 @@ public class DetailRecipeIngredientsFragment extends Fragment {
         ButterKnife.bind(this, rootView);
         mContext = rootView.getContext();
 
-        // Create RecipeCardAdapter (null recipes)
-        mRecipeIngredientsAdapter = new RecipeIngredientAdapter(null);
-
         // Load & set GridLayout
         mRecipeIngredientsRecyclerView.setHasFixedSize(true);
         setRecyclerViewLayoutManager(rootView);
 
+        if(savedInstanceState != null) {
+
+            // Retrieve list of ingredients from savedInstanceState
+            List<Ingredient> ingredients = savedInstanceState.
+                    getParcelableArrayList(RECIPE_INGREDIENTS_SAVED_INST);
+
+            // Create RecipeIngredientAdapter (with ingredients)
+            mRecipeIngredientsAdapter = new RecipeIngredientAdapter(ingredients);
+
+            // Set Adapter and notifyDataSetChanged
+            mRecipeIngredientsRecyclerView.setAdapter(mRecipeIngredientsAdapter);
+            mRecipeIngredientsAdapter.notifyDataSetChanged();
+
+        } else {
+
+            // Create RecipeIngredientAdapter (nulll ingredients)
+            mRecipeIngredientsAdapter = new RecipeIngredientAdapter(null);
+
+        }
+
         // Return rootView
         return rootView;
 
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        ArrayList<Ingredient> ingredients = (ArrayList<Ingredient>) mRecipeIngredientsAdapter.getmIngredients();
+        outState.putParcelableArrayList(RECIPE_INGREDIENTS_SAVED_INST, ingredients);
+        super.onSaveInstanceState(outState);
     }
 
     public void setRecipeIngredients(List<Ingredient> ingredients) {
@@ -68,9 +95,9 @@ public class DetailRecipeIngredientsFragment extends Fragment {
 
     public void setRecyclerViewVisibility(boolean isExpanded) {
         if(isExpanded) {
-            ViewUtils.collapseView(rootView);
-        } else {
             ViewUtils.expandView(rootView);
+        } else {
+            ViewUtils.collapseView(rootView);
         }
     }
 

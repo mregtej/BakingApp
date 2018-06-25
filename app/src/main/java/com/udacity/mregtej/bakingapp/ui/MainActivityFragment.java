@@ -23,6 +23,7 @@ import com.udacity.mregtej.bakingapp.ui.adapter.RecipeCardAdapter;
 import com.udacity.mregtej.bakingapp.ui.dialog.AlertDialogHelper;
 import com.udacity.mregtej.bakingapp.viewmodel.RecipeViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -30,6 +31,8 @@ import butterknife.ButterKnife;
 
 public class MainActivityFragment extends Fragment
         implements RecipeCardAdapter.RecipeCardClickListener {
+
+    private static final String RECIPE_LIST_SAVED_INST = "recipe-list";
 
     private static final String RECIPE_EXTRA = "recipe";
 
@@ -63,22 +66,44 @@ public class MainActivityFragment extends Fragment
 
         else {
 
-            // Create RecipeCardAdapter (null recipes)
-            mRecipeCardAdapter = new RecipeCardAdapter(null, this);
-
             // Load & set GridLayout
             mRecipeCardRecyclerView.setHasFixedSize(true);
             setRecyclerViewLayoutManager(rootView);
 
-            // Subscribe MainActivityFragment to receive notifications from RecipeViewModel
-            registerToRecipeModel();
+            if(savedInstanceState != null) {
 
-            // Get recipe list from RecipeViewModel
-            getRecipes();
+                // Retrieve recipes from savedInstanceState
+                List<Recipe> recipes = savedInstanceState.getParcelableArrayList(RECIPE_LIST_SAVED_INST);
+
+                // Create RecipeCardAdapter (with recipes)
+                mRecipeCardAdapter = new RecipeCardAdapter(recipes, this);
+
+                // Set Adapter and notifyDataSetChanged
+                mRecipeCardRecyclerView.setAdapter(mRecipeCardAdapter);
+                mRecipeCardAdapter.notifyDataSetChanged();
+
+            } else {
+
+                // Create RecipeCardAdapter (null recipes)
+                mRecipeCardAdapter = new RecipeCardAdapter(null, this);
+
+                // Subscribe MainActivityFragment to receive notifications from RecipeViewModel
+                registerToRecipeModel();
+
+                // Get recipe list from RecipeViewModel
+                getRecipes();
+
+            }
         }
 
         // Return rootView
         return rootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        ArrayList<Recipe> recipes = (ArrayList<Recipe>)mRecipeCardAdapter.getmRecipeList();
+        outState.putParcelableArrayList(RECIPE_LIST_SAVED_INST, recipes);
     }
 
     //--------------------------------------------------------------------------------|

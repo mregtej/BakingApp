@@ -80,6 +80,7 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Vi
 
     public void setmRecipeList(List<Recipe> mRecipeList) { this.mRecipeList = mRecipeList; }
 
+    public List<Recipe> getmRecipeList() { return mRecipeList; }
 
     //--------------------------------------------------------------------------------|
     //                              Support Classes                                   |

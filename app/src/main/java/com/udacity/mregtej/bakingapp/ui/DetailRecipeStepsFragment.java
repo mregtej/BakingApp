@@ -27,8 +27,10 @@ import butterknife.ButterKnife;
 public class DetailRecipeStepsFragment extends Fragment
         implements RecipeStepAdapter.RecipeStepClickListener {
 
+    private static final String RECIPE_STEPS_SAVED_INST = "recipe-steps";
+
     private static final String RECIPE_NAME_EXTRA = "recipe-name";
-    private static final String RECIPE_STEPS_EXTRA = "recipe-step";
+    private static final String RECIPE_STEP_EXTRA = "recipe-step";
     private static final String RECIPE_STEP_POSITION_EXTRA = "recipe-step-position";
 
     /** RecyclerView LayoutManager instance */
@@ -57,16 +59,40 @@ public class DetailRecipeStepsFragment extends Fragment
         ButterKnife.bind(this, rootView);
         mContext = rootView.getContext();
 
-        // Create RecipeCardAdapter (null recipes)
-        mRecipeStepsAdapter = new RecipeStepAdapter(null,this);
-
         // Load & set GridLayout
         mRecipeStepsRecyclerView.setHasFixedSize(true);
         setRecyclerViewLayoutManager(rootView);
 
+        if(savedInstanceState != null) {
+
+            // Retrieve list of ingredients from savedInstanceState
+            List<Step> recipeSteps = savedInstanceState.
+                    getParcelableArrayList(RECIPE_STEPS_SAVED_INST);
+
+            // Create RecipeIngredientAdapter (with ingredients)
+            mRecipeStepsAdapter = new RecipeStepAdapter(recipeSteps,this);
+
+            // Set Adapter and notifyDataSetChanged
+            mRecipeStepsRecyclerView.setAdapter(mRecipeStepsAdapter);
+            mRecipeStepsAdapter.notifyDataSetChanged();
+
+        } else {
+
+            // Create RecipeStepAdapter (null recipes steps)
+            mRecipeStepsAdapter = new RecipeStepAdapter(null,this);
+
+        }
+
         // Return rootView
         return rootView;
 
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        ArrayList<Step> recipeSteps = (ArrayList<Step>) mRecipeStepsAdapter.getmRecipeSteps();
+        outState.putParcelableArrayList(RECIPE_STEPS_SAVED_INST, recipeSteps);
+        super.onSaveInstanceState(outState);
     }
 
     public void setmRecipeName(String mRecipeName) {
@@ -81,9 +107,9 @@ public class DetailRecipeStepsFragment extends Fragment
 
     public void setRecyclerViewVisibility(boolean isExpanded) {
         if(isExpanded) {
-            ViewUtils.collapseView(rootView);
-        } else {
             ViewUtils.expandView(rootView);
+        } else {
+            ViewUtils.collapseView(rootView);
         }
     }
 
@@ -116,7 +142,7 @@ public class DetailRecipeStepsFragment extends Fragment
         ArrayList<Step> recipeSteps = (ArrayList<Step>) mRecipeStepsAdapter.getmRecipeSteps();
         if(recipeSteps != null) {
             i.putExtra(RECIPE_NAME_EXTRA, mRecipeName);
-            i.putParcelableArrayListExtra(RECIPE_STEPS_EXTRA, recipeSteps);
+            i.putParcelableArrayListExtra(RECIPE_STEP_EXTRA, recipeSteps);
             i.putExtra(RECIPE_STEP_POSITION_EXTRA, position);
         }
         this.startActivity(i);
