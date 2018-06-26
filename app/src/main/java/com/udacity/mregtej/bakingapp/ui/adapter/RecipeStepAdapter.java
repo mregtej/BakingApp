@@ -87,7 +87,7 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepAdapter.Vi
     //--------------------------------------------------------------------------------|
 
     public interface RecipeStepClickListener {
-        public void OnRecipeStepClick(int position);
+        public void onRecipeStepClick(int position);
     }
 
 
@@ -143,7 +143,7 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepAdapter.Vi
             @Override
             public void onClick(View v) {
                 if(mRecipeStepClickListener != null) {
-                    mRecipeStepClickListener.OnRecipeStepClick((int)v.getTag());
+                    mRecipeStepClickListener.onRecipeStepClick((int)v.getTag());
                 }
             }
         });

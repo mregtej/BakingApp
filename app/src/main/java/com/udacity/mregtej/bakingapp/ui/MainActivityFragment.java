@@ -47,6 +47,8 @@ public class MainActivityFragment extends Fragment
     /** Activity Context */
     private Context mContext;
 
+    private boolean tabletSize;
+
     public MainActivityFragment() { }
 
     @Nullable
@@ -58,6 +60,7 @@ public class MainActivityFragment extends Fragment
                 false);
         ButterKnife.bind(this, rootView);
         mContext = rootView.getContext();
+        tabletSize = getResources().getBoolean(R.bool.isTablet);
 
         // Check network connectivity
         if (!ConnectivityHandler.isConnected(getActivity())) {
@@ -165,18 +168,31 @@ public class MainActivityFragment extends Fragment
      * @param   rootView    Activity view
      */
     private void setRecyclerViewLayoutManager(View rootView) {
-        switch(this.getResources().getConfiguration().orientation) {
-            case BakingAppGlobals.LANDSCAPE_VIEW: // Landscape Mode
-                mRecipeCardLayoutManager = new GridLayoutManager(
-                        rootView.getContext(),
-                        BakingAppGlobals.RECIPE_GV_LAND_COLUMN_NUMB);
-                break;
-            case BakingAppGlobals.PORTRAIT_VIEW: // Portrait Mode
-            default:
-                mRecipeCardLayoutManager = new GridLayoutManager(
-                        rootView.getContext(),
-                        BakingAppGlobals.RECIPE_GV_PORT_COLUMN_NUMB);
-                break;
+
+        if(tabletSize) {
+            switch (this.getResources().getConfiguration().orientation) {
+                case BakingAppGlobals.LANDSCAPE_VIEW: // Landscape Mode
+                    mRecipeCardLayoutManager = new GridLayoutManager(rootView.getContext(),
+                            BakingAppGlobals.RECIPE_GV_TABLET_LAND_COLUMN_NUMB);
+                    break;
+                case BakingAppGlobals.PORTRAIT_VIEW: // Portrait Mode
+                default:
+                    mRecipeCardLayoutManager = new GridLayoutManager(rootView.getContext(),
+                            BakingAppGlobals.RECIPE_GV_TABLET_PORT_COLUMN_NUMB);
+                    break;
+            }
+        } else {
+            switch (this.getResources().getConfiguration().orientation) {
+                case BakingAppGlobals.LANDSCAPE_VIEW: // Landscape Mode
+                    mRecipeCardLayoutManager = new GridLayoutManager(rootView.getContext(),
+                            BakingAppGlobals.RECIPE_GV_LAND_COLUMN_NUMB);
+                    break;
+                case BakingAppGlobals.PORTRAIT_VIEW: // Portrait Mode
+                default:
+                    mRecipeCardLayoutManager = new GridLayoutManager(rootView.getContext(),
+                            BakingAppGlobals.RECIPE_GV_PORT_COLUMN_NUMB);
+                    break;
+            }
         }
         mRecipeCardRecyclerView.setLayoutManager(mRecipeCardLayoutManager);
     }
@@ -210,7 +226,12 @@ public class MainActivityFragment extends Fragment
 
     @Override
     public void OnRecipeCardClick(int position) {
-        Intent i = new Intent(mContext, DetailRecipeActivity.class);
+        Intent i;
+        if(tabletSize) {
+            i = new Intent(mContext, DetailRecipeTabletActivity.class);
+        } else {
+            i = new Intent(mContext, DetailRecipeActivity.class);
+        }
         Recipe recipe = mRecipeCardAdapter.getRecipeByPosition(position);
         if(recipe != null) {
             i.putExtra(RECIPE_EXTRA, recipe);

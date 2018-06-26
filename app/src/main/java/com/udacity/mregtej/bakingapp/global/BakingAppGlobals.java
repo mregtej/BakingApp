@@ -7,4 +7,7 @@ public class BakingAppGlobals {
 
     public static final int RECIPE_GV_LAND_COLUMN_NUMB = 2;
     public static final int RECIPE_GV_PORT_COLUMN_NUMB = 1;
+
+    public static final int RECIPE_GV_TABLET_LAND_COLUMN_NUMB = 4;
+    public static final int RECIPE_GV_TABLET_PORT_COLUMN_NUMB = 3;
 }

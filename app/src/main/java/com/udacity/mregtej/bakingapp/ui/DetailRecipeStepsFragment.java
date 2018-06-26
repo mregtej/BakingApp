@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.udacity.mregtej.bakingapp.R;
 import com.udacity.mregtej.bakingapp.datamodel.Step;
@@ -28,10 +29,13 @@ public class DetailRecipeStepsFragment extends Fragment
         implements RecipeStepAdapter.RecipeStepClickListener {
 
     private static final String RECIPE_STEPS_SAVED_INST = "recipe-steps";
+    private static final String RECIPE_STEPS_EXPANDED_SAVED_INST = "is-steps-expanded";
 
     private static final String RECIPE_NAME_EXTRA = "recipe-name";
     private static final String RECIPE_STEP_EXTRA = "recipe-step";
     private static final String RECIPE_STEP_POSITION_EXTRA = "recipe-step-position";
+
+    private boolean isStepsRecyclerViewExpanded;
 
     /** RecyclerView LayoutManager instance */
     private RecyclerView.LayoutManager mRecipeStepsLayoutManager;
@@ -39,12 +43,16 @@ public class DetailRecipeStepsFragment extends Fragment
     private RecipeStepAdapter mRecipeStepsAdapter;
     /** Custom Recipe Card GridView (RecyclerView) */
     @BindView(R.id.recipe_step_description_recyclerview) RecyclerView mRecipeStepsRecyclerView;
+    @BindView(R.id.ib_expand_collapse_steps_rv) ImageView mCollapseStepsImageView;
     /** Activity Context */
     private Context mContext;
 
     private String mRecipeName;
 
     private View rootView;
+    private boolean tabletSize;
+
+    private RecipeStepClickListener mRecipeStepClickListener;
 
     public DetailRecipeStepsFragment() { }
 
@@ -58,6 +66,7 @@ public class DetailRecipeStepsFragment extends Fragment
                 false);
         ButterKnife.bind(this, rootView);
         mContext = rootView.getContext();
+        tabletSize = getResources().getBoolean(R.bool.isTablet);
 
         // Load & set GridLayout
         mRecipeStepsRecyclerView.setHasFixedSize(true);
@@ -68,6 +77,9 @@ public class DetailRecipeStepsFragment extends Fragment
             // Retrieve list of ingredients from savedInstanceState
             List<Step> recipeSteps = savedInstanceState.
                     getParcelableArrayList(RECIPE_STEPS_SAVED_INST);
+            isStepsRecyclerViewExpanded = savedInstanceState.
+                    getBoolean(RECIPE_STEPS_EXPANDED_SAVED_INST);
+            setRecyclerViewVisibility(isStepsRecyclerViewExpanded);
 
             // Create RecipeIngredientAdapter (with ingredients)
             mRecipeStepsAdapter = new RecipeStepAdapter(recipeSteps,this);
@@ -81,7 +93,17 @@ public class DetailRecipeStepsFragment extends Fragment
             // Create RecipeStepAdapter (null recipes steps)
             mRecipeStepsAdapter = new RecipeStepAdapter(null,this);
 
+            // RecyclerViews expanded by default
+            isStepsRecyclerViewExpanded = true;
+            setRecyclerViewVisibility(isStepsRecyclerViewExpanded);
+
         }
+
+        // Add Collapse/Expand clickListeners
+        setCollapseViewClickListeners();
+
+        // Update Status of Collapse/Expand Button
+        updateStatusCollapseView();
 
         // Return rootView
         return rootView;
@@ -92,11 +114,16 @@ public class DetailRecipeStepsFragment extends Fragment
     public void onSaveInstanceState(@NonNull Bundle outState) {
         ArrayList<Step> recipeSteps = (ArrayList<Step>) mRecipeStepsAdapter.getmRecipeSteps();
         outState.putParcelableArrayList(RECIPE_STEPS_SAVED_INST, recipeSteps);
+        outState.putBoolean(RECIPE_STEPS_EXPANDED_SAVED_INST, isStepsRecyclerViewExpanded);
         super.onSaveInstanceState(outState);
     }
 
     public void setmRecipeName(String mRecipeName) {
         this.mRecipeName = mRecipeName;
+    }
+
+    public void setmRecipeStepClickListener(RecipeStepClickListener mRecipeStepClickListener) {
+        this.mRecipeStepClickListener = mRecipeStepClickListener;
     }
 
     public void setRecipeSteps(List<Step> recipeSteps) {
@@ -107,9 +134,9 @@ public class DetailRecipeStepsFragment extends Fragment
 
     public void setRecyclerViewVisibility(boolean isExpanded) {
         if(isExpanded) {
-            ViewUtils.expandView(rootView);
+            ViewUtils.expandView(mRecipeStepsRecyclerView);
         } else {
-            ViewUtils.collapseView(rootView);
+            ViewUtils.collapseView(mRecipeStepsRecyclerView);
         }
     }
 
@@ -120,32 +147,41 @@ public class DetailRecipeStepsFragment extends Fragment
      * @param   rootView    Activity view
      */
     private void setRecyclerViewLayoutManager(View rootView) {
-        switch(this.getResources().getConfiguration().orientation) {
-            case BakingAppGlobals.LANDSCAPE_VIEW: // Landscape Mode
-                mRecipeStepsLayoutManager = new GridLayoutManager(
-                        rootView.getContext(),
-                        BakingAppGlobals.RECIPE_GV_LAND_COLUMN_NUMB);
-                break;
-            case BakingAppGlobals.PORTRAIT_VIEW: // Portrait Mode
-            default:
-                mRecipeStepsLayoutManager = new GridLayoutManager(
-                        rootView.getContext(),
-                        BakingAppGlobals.RECIPE_GV_PORT_COLUMN_NUMB);
-                break;
+        if(tabletSize) {
+            mRecipeStepsLayoutManager = new GridLayoutManager(rootView.getContext(),
+                    BakingAppGlobals.RECIPE_GV_PORT_COLUMN_NUMB);
+        } else {
+            switch (this.getResources().getConfiguration().orientation) {
+                case BakingAppGlobals.LANDSCAPE_VIEW: // Landscape Mode
+                    mRecipeStepsLayoutManager = new GridLayoutManager(rootView.getContext(),
+                            BakingAppGlobals.RECIPE_GV_LAND_COLUMN_NUMB);
+                    break;
+                case BakingAppGlobals.PORTRAIT_VIEW: // Portrait Mode
+                default:
+                    mRecipeStepsLayoutManager = new GridLayoutManager(rootView.getContext(),
+                            BakingAppGlobals.RECIPE_GV_PORT_COLUMN_NUMB);
+                    break;
+            }
         }
         mRecipeStepsRecyclerView.setLayoutManager(mRecipeStepsLayoutManager);
     }
 
     @Override
-    public void OnRecipeStepClick(int position) {
-        Intent i = new Intent(mContext, RecipeStepDetailViewActivity.class);
-        ArrayList<Step> recipeSteps = (ArrayList<Step>) mRecipeStepsAdapter.getmRecipeSteps();
-        if(recipeSteps != null) {
-            i.putExtra(RECIPE_NAME_EXTRA, mRecipeName);
-            i.putParcelableArrayListExtra(RECIPE_STEP_EXTRA, recipeSteps);
-            i.putExtra(RECIPE_STEP_POSITION_EXTRA, position);
+    public void onRecipeStepClick(int position) {
+        if(tabletSize) {
+            if(mRecipeStepClickListener != null) {
+                mRecipeStepClickListener.onRecipeStepClick(position);
+            }
+        } else {
+            Intent i = new Intent(mContext, RecipeStepDetailViewActivity.class);
+            ArrayList<Step> recipeSteps = (ArrayList<Step>) mRecipeStepsAdapter.getmRecipeSteps();
+            if(recipeSteps != null) {
+                i.putExtra(RECIPE_NAME_EXTRA, mRecipeName);
+                i.putParcelableArrayListExtra(RECIPE_STEP_EXTRA, recipeSteps);
+                i.putExtra(RECIPE_STEP_POSITION_EXTRA, position);
+            }
+            this.startActivity(i);
         }
-        this.startActivity(i);
     }
 
     private List<Step> checkRecipeStepsConsistency(List<Step> recipeSteps) {
@@ -166,6 +202,37 @@ public class DetailRecipeStepsFragment extends Fragment
             }
         }
         return wellFormatedRecipeSteps;
+    }
+
+    private void setCollapseViewClickListeners() {
+
+        // Set Expand/Collapse OnClick action for Steps RecyclerView
+        mCollapseStepsImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isStepsRecyclerViewExpanded = !isStepsRecyclerViewExpanded;
+                setRecyclerViewVisibility(isStepsRecyclerViewExpanded);
+                if(isStepsRecyclerViewExpanded) {
+                    mCollapseStepsImageView.setImageResource(R.mipmap.ic_collapse);
+                } else {
+                    mCollapseStepsImageView.setImageResource(R.mipmap.ic_expand);
+                }
+            }
+        });
+
+    }
+
+    private void updateStatusCollapseView() {
+        // Handle expansion / collapse of RecyclerViews
+        if(isStepsRecyclerViewExpanded) {
+            mCollapseStepsImageView.setImageResource(R.mipmap.ic_collapse);
+        } else {
+            mCollapseStepsImageView.setImageResource(R.mipmap.ic_expand);
+        }
+    }
+
+    public interface RecipeStepClickListener {
+        public void onRecipeStepClick(int position);
     }
 
 }

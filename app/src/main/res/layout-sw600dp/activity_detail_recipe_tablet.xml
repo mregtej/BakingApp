@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/fr_detail_recipe_ingredients_fragment"
+        android:name="com.udacity.mregtej.bakingapp.ui.DetailRecipeIngredientsFragment"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:context=".ui.DetailRecipeActivity"
+        tools:layout="@layout/fragment_recipe_ingredients" />
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/fr_detail_recipe_steps_fragment"
+        android:name="com.udacity.mregtej.bakingapp.ui.DetailRecipeStepsFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/fr_detail_recipe_ingredients_fragment"
+        app:layout_constraintStart_toStartOf="@+id/fr_detail_recipe_ingredients_fragment"
+        app:layout_constraintTop_toBottomOf="@+id/fr_detail_recipe_ingredients_fragment"
+        tools:context=".ui.DetailRecipeActivity"
+        tools:layout="@layout/fragment_recipe_steps" />
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/fr_detail_recipe_step_video"
+        android:name="com.udacity.mregtej.bakingapp.ui.RecipeStepVideoDetailViewFragment"
+        android:layout_width="0dp"
+        android:layout_height="280dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/view"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:context=".ui.RecipeStepDetailViewActivity"
+        tools:layout="@layout/fragment_detail_recipe_step_video" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="2dp"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="8dp"
+        android:background="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/fr_detail_recipe_ingredients_fragment"
+        app:layout_constraintTop_toTopOf="parent"></View>
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/fr_detail_recipe_step_data"
+        android:name="com.udacity.mregtej.bakingapp.ui.RecipeStepDataDetailViewFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/fr_detail_recipe_step_video"
+        app:layout_constraintStart_toStartOf="@+id/fr_detail_recipe_step_video"
+        app:layout_constraintTop_toBottomOf="@+id/fr_detail_recipe_step_video"
+        app:layout_constraintVertical_bias="0.0"
+        tools:context=".ui.RecipeStepDetailViewActivity"
+        tools:layout="@layout/fragment_detail_recipe_step_data" />
+
+</android.support.constraint.ConstraintLayout>

@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.udacity.mregtej.bakingapp.R;
 import com.udacity.mregtej.bakingapp.datamodel.Ingredient;
@@ -26,6 +27,9 @@ import butterknife.ButterKnife;
 public class DetailRecipeIngredientsFragment extends Fragment {
 
     private static final String RECIPE_INGREDIENTS_SAVED_INST = "ingredients";
+    private static final String RECIPE_INGREDIENTS_EXPANDED_SAVED_INST = "is-ingredients-expanded";
+
+    private boolean isIngredientsRecyclerViewExpanded;
 
     /** RecyclerView LayoutManager instance */
     private RecyclerView.LayoutManager mRecipeIngredientsLayoutManager;
@@ -33,10 +37,12 @@ public class DetailRecipeIngredientsFragment extends Fragment {
     private RecipeIngredientAdapter mRecipeIngredientsAdapter;
     /** Custom Recipe Card GridView (RecyclerView) */
     @BindView(R.id.recipe_ingredients_recyclerview) RecyclerView mRecipeIngredientsRecyclerView;
+    @BindView(R.id.ib_expand_collapse_ingredients_rv) ImageView mCollapseIngredientsImageView;
     /** Activity Context */
     private Context mContext;
 
     private View rootView;
+    private boolean tabletSize;
 
     public DetailRecipeIngredientsFragment() { }
 
@@ -50,6 +56,7 @@ public class DetailRecipeIngredientsFragment extends Fragment {
                 false);
         ButterKnife.bind(this, rootView);
         mContext = rootView.getContext();
+        tabletSize = getResources().getBoolean(R.bool.isTablet);
 
         // Load & set GridLayout
         mRecipeIngredientsRecyclerView.setHasFixedSize(true);
@@ -60,6 +67,9 @@ public class DetailRecipeIngredientsFragment extends Fragment {
             // Retrieve list of ingredients from savedInstanceState
             List<Ingredient> ingredients = savedInstanceState.
                     getParcelableArrayList(RECIPE_INGREDIENTS_SAVED_INST);
+            isIngredientsRecyclerViewExpanded = savedInstanceState.
+                    getBoolean(RECIPE_INGREDIENTS_EXPANDED_SAVED_INST);
+            setRecyclerViewVisibility(isIngredientsRecyclerViewExpanded);
 
             // Create RecipeIngredientAdapter (with ingredients)
             mRecipeIngredientsAdapter = new RecipeIngredientAdapter(ingredients);
@@ -73,17 +83,29 @@ public class DetailRecipeIngredientsFragment extends Fragment {
             // Create RecipeIngredientAdapter (nulll ingredients)
             mRecipeIngredientsAdapter = new RecipeIngredientAdapter(null);
 
+            // RecyclerViews expanded by default
+            isIngredientsRecyclerViewExpanded = true;
+            setRecyclerViewVisibility(isIngredientsRecyclerViewExpanded);
+
         }
+
+        // Add Collapse/Expand clickListeners
+        setCollapseViewClickListeners();
+
+        // Update Status of Collapse/Expand Button
+        updateStatusCollapseView();
 
         // Return rootView
         return rootView;
 
     }
 
+
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         ArrayList<Ingredient> ingredients = (ArrayList<Ingredient>) mRecipeIngredientsAdapter.getmIngredients();
         outState.putParcelableArrayList(RECIPE_INGREDIENTS_SAVED_INST, ingredients);
+        outState.putBoolean(RECIPE_INGREDIENTS_EXPANDED_SAVED_INST, isIngredientsRecyclerViewExpanded);
         super.onSaveInstanceState(outState);
     }
 
@@ -93,11 +115,11 @@ public class DetailRecipeIngredientsFragment extends Fragment {
         mRecipeIngredientsAdapter.notifyDataSetChanged();
     }
 
-    public void setRecyclerViewVisibility(boolean isExpanded) {
+    private void setRecyclerViewVisibility(boolean isExpanded) {
         if(isExpanded) {
-            ViewUtils.expandView(rootView);
+            ViewUtils.expandView(mRecipeIngredientsRecyclerView);
         } else {
-            ViewUtils.collapseView(rootView);
+            ViewUtils.collapseView(mRecipeIngredientsRecyclerView);
         }
     }
 
@@ -108,20 +130,50 @@ public class DetailRecipeIngredientsFragment extends Fragment {
      * @param   rootView    Activity view
      */
     private void setRecyclerViewLayoutManager(View rootView) {
-        switch(this.getResources().getConfiguration().orientation) {
-            case BakingAppGlobals.LANDSCAPE_VIEW: // Landscape Mode
-                mRecipeIngredientsLayoutManager = new GridLayoutManager(
-                        rootView.getContext(),
-                        BakingAppGlobals.RECIPE_GV_LAND_COLUMN_NUMB);
-                break;
-            case BakingAppGlobals.PORTRAIT_VIEW: // Portrait Mode
-            default:
-                mRecipeIngredientsLayoutManager = new GridLayoutManager(
-                        rootView.getContext(),
-                        BakingAppGlobals.RECIPE_GV_PORT_COLUMN_NUMB);
-                break;
+        if(tabletSize) {
+            mRecipeIngredientsLayoutManager = new GridLayoutManager(rootView.getContext(),
+                    BakingAppGlobals.RECIPE_GV_PORT_COLUMN_NUMB);
+        } else {
+            switch (this.getResources().getConfiguration().orientation) {
+                case BakingAppGlobals.LANDSCAPE_VIEW: // Landscape Mode
+                    mRecipeIngredientsLayoutManager = new GridLayoutManager(rootView.getContext(),
+                            BakingAppGlobals.RECIPE_GV_LAND_COLUMN_NUMB);
+                    break;
+                case BakingAppGlobals.PORTRAIT_VIEW: // Portrait Mode
+                default:
+                    mRecipeIngredientsLayoutManager = new GridLayoutManager(rootView.getContext(),
+                            BakingAppGlobals.RECIPE_GV_PORT_COLUMN_NUMB);
+                    break;
+            }
         }
         mRecipeIngredientsRecyclerView.setLayoutManager(mRecipeIngredientsLayoutManager);
+    }
+
+    private void setCollapseViewClickListeners() {
+
+        // Set Expand/Collapse OnClick action for Ingredients RecyclerView
+        mCollapseIngredientsImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isIngredientsRecyclerViewExpanded = !isIngredientsRecyclerViewExpanded;
+                setRecyclerViewVisibility(isIngredientsRecyclerViewExpanded);
+                if(isIngredientsRecyclerViewExpanded) {
+                    mCollapseIngredientsImageView.setImageResource(R.mipmap.ic_collapse);
+                } else {
+                    mCollapseIngredientsImageView.setImageResource(R.mipmap.ic_expand);
+                }
+            }
+        });
+
+    }
+
+    private void updateStatusCollapseView() {
+        // Handle expansion / collapse of RecyclerViews
+        if(isIngredientsRecyclerViewExpanded) {
+            mCollapseIngredientsImageView.setImageResource(R.mipmap.ic_collapse);
+        } else {
+            mCollapseIngredientsImageView.setImageResource(R.mipmap.ic_expand);
+        }
     }
 
 }

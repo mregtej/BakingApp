@@ -20,19 +20,11 @@ import butterknife.ButterKnife;
 public class DetailRecipeActivity extends AppCompatActivity {
 
     private static final String RECIPE_SAVED_INST = "recipe";
-    private static final String RECIPE_INGREDIENTS_EXPANDED_SAVED_INST = "is-ingredients-expanded";
-    private static final String RECIPE_STEPS_EXPANDED_SAVED_INST = "is-steps-expanded";
 
     private static final String RECIPE_EXTRA = "recipe";
 
     private Recipe mRecipe;
     private ActionBar mActionBar;
-
-    private boolean isIngredientsRecyclerViewExpanded;
-    private boolean isStepsRecyclerViewExpanded;
-
-    @BindView(R.id.ib_expand_collapse_ingredients_rv) ImageView mCollapseIngredientsImageView;
-    @BindView(R.id.ib_expand_collapse_steps_rv) ImageView mCollapseStepsImageView;
 
     private DetailRecipeIngredientsFragment mDetailRecipeIngredientsFragment;
     private DetailRecipeStepsFragment mDetailRecipeStepsFragment;
@@ -51,10 +43,6 @@ public class DetailRecipeActivity extends AppCompatActivity {
         if(savedInstanceState != null) {
 
             mRecipe = savedInstanceState.getParcelable(RECIPE_SAVED_INST);
-            isIngredientsRecyclerViewExpanded = savedInstanceState.
-                    getBoolean(RECIPE_INGREDIENTS_EXPANDED_SAVED_INST);
-            isStepsRecyclerViewExpanded = savedInstanceState.
-                    getBoolean(RECIPE_STEPS_EXPANDED_SAVED_INST);
 
         } else {
 
@@ -68,9 +56,6 @@ public class DetailRecipeActivity extends AppCompatActivity {
                 // Set recipe name as Activity title
                 mActionBar.setTitle(mRecipe.getName());
 
-                // RecyclerViews expanded by default
-                isIngredientsRecyclerViewExpanded = true;
-                isStepsRecyclerViewExpanded = true;
             }
 
         }
@@ -78,16 +63,11 @@ public class DetailRecipeActivity extends AppCompatActivity {
         // Create Recipe Fragments (Populate UI)
         populateUIFragments();
 
-        // Add Collapse/Expand clickListeners
-        setCollapseViewClickListeners();
-
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putParcelable(RECIPE_SAVED_INST, mRecipe);
-        outState.putBoolean(RECIPE_INGREDIENTS_EXPANDED_SAVED_INST, isIngredientsRecyclerViewExpanded);
-        outState.putBoolean(RECIPE_STEPS_EXPANDED_SAVED_INST, isStepsRecyclerViewExpanded);
         super.onSaveInstanceState(outState);
     }
 
@@ -109,8 +89,6 @@ public class DetailRecipeActivity extends AppCompatActivity {
                         findFragmentById(R.id.fr_detail_recipe_ingredients_fragment);
         if(mDetailRecipeIngredientsFragment != null) {
             mDetailRecipeIngredientsFragment.setRecipeIngredients(mRecipe.getIngredients());
-            mDetailRecipeIngredientsFragment.setRecyclerViewVisibility(
-                    isIngredientsRecyclerViewExpanded);
         }
 
         mDetailRecipeStepsFragment = (DetailRecipeStepsFragment)
@@ -119,56 +97,7 @@ public class DetailRecipeActivity extends AppCompatActivity {
         if(mDetailRecipeStepsFragment != null) {
             mDetailRecipeStepsFragment.setRecipeSteps(mRecipe.getSteps());
             mDetailRecipeStepsFragment.setmRecipeName(mRecipe.getName());
-            mDetailRecipeStepsFragment.setRecyclerViewVisibility(isStepsRecyclerViewExpanded);
         }
-
-        // Handle expansion / collapse of RecyclerViews
-        if(isIngredientsRecyclerViewExpanded) {
-            mCollapseIngredientsImageView.setImageResource(R.mipmap.ic_collapse);
-        } else {
-            mCollapseIngredientsImageView.setImageResource(R.mipmap.ic_expand);
-        }
-        if(isStepsRecyclerViewExpanded) {
-            mCollapseStepsImageView.setImageResource(R.mipmap.ic_collapse);
-        } else {
-            mCollapseStepsImageView.setImageResource(R.mipmap.ic_expand);
-        }
-
-    }
-
-    private void setCollapseViewClickListeners() {
-
-        // Set Expand/Collapse OnClick action for Ingredients RecyclerView
-        mCollapseIngredientsImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isIngredientsRecyclerViewExpanded = !isIngredientsRecyclerViewExpanded;
-                if(mDetailRecipeIngredientsFragment != null) {
-                    mDetailRecipeIngredientsFragment.setRecyclerViewVisibility(isIngredientsRecyclerViewExpanded);
-                }
-                if(isIngredientsRecyclerViewExpanded) {
-                    mCollapseIngredientsImageView.setImageResource(R.mipmap.ic_collapse);
-                } else {
-                    mCollapseIngredientsImageView.setImageResource(R.mipmap.ic_expand);
-                }
-            }
-        });
-
-        // Set Expand/Collapse OnClick action for Steps RecyclerView
-        mCollapseStepsImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isStepsRecyclerViewExpanded = !isStepsRecyclerViewExpanded;
-                if(mDetailRecipeStepsFragment != null) {
-                    mDetailRecipeStepsFragment.setRecyclerViewVisibility(isStepsRecyclerViewExpanded);
-                }
-                if(isStepsRecyclerViewExpanded) {
-                    mCollapseStepsImageView.setImageResource(R.mipmap.ic_collapse);
-                } else {
-                    mCollapseStepsImageView.setImageResource(R.mipmap.ic_expand);
-                }
-            }
-        });
 
     }
 
