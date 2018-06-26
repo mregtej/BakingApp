@@ -7,8 +7,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -26,14 +28,19 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.TransferListener;
 import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
 import com.udacity.mregtej.bakingapp.R;
 import com.udacity.mregtej.bakingapp.datamodel.Step;
+import com.udacity.mregtej.bakingapp.ui.utils.TextUtils;
+
+import java.net.URISyntaxException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class RecipeStepVideoDetailViewFragment extends Fragment {
 
+    @BindView(R.id.iv_recipe_video_not_available) ImageView mVideoNotAvailableImageView;
     @BindView(R.id.ev_recipe_step_video) SimpleExoPlayerView mSimpleExoPlayerView;
 
     private static final String RECIPE_STEPS_SAVED_INSTANCE = "recipe-step";
@@ -147,6 +154,7 @@ public class RecipeStepVideoDetailViewFragment extends Fragment {
 
     private void initializePlayer() {
 
+        mVideoNotAvailableImageView.setVisibility(View.GONE);
         mSimpleExoPlayerView.requestFocus();
 
         TrackSelection.Factory videoTrackSelectionFactory =
@@ -159,15 +167,23 @@ public class RecipeStepVideoDetailViewFragment extends Fragment {
         mSimpleExoPlayerView.setPlayer(player);
 
         player.setPlayWhenReady(shouldAutoPlay);
-        /*  MediaSource mediaSource = new HlsMediaSource(Uri.parse("https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8"),
-                mediaDataSourceFactory, mainHandler, null);*/
 
         DefaultExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
 
-        MediaSource mediaSource = new ExtractorMediaSource(Uri.parse(mRecipeStep.getVideoURL()),
-                mediaDataSourceFactory, extractorsFactory, null, null);
-
-        player.prepare(mediaSource);
+        String videoURL = handleVideoURL(mRecipeStep.getVideoURL());
+        if(videoURL != null) {
+            MediaSource mediaSource = new ExtractorMediaSource(Uri.parse(videoURL),
+                    mediaDataSourceFactory, extractorsFactory, null, null);
+            player.prepare(mediaSource);
+        } else {
+            Picasso
+                    .with(mContext)
+                    .load(R.drawable.ic_video_not_available)
+                    .fit()
+                    .centerCrop()
+                    .into(mVideoNotAvailableImageView);
+            mVideoNotAvailableImageView.setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -178,6 +194,12 @@ public class RecipeStepVideoDetailViewFragment extends Fragment {
             player = null;
             trackSelector = null;
         }
+    }
+
+    private String handleVideoURL(String url) {
+        if(TextUtils.isEmpty(url)) { return null; }
+        if (url.contains(".mp4") || url.contains(".3gp")) { return url; }
+        return null;
     }
 
 }

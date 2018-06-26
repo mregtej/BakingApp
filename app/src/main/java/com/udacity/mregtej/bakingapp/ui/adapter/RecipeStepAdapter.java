@@ -1,6 +1,7 @@
 package com.udacity.mregtej.bakingapp.ui.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import com.udacity.mregtej.bakingapp.R;
 import com.udacity.mregtej.bakingapp.datamodel.Step;
+import com.udacity.mregtej.bakingapp.ui.utils.TextUtils;
 
 import java.util.List;
 
@@ -115,9 +117,15 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepAdapter.Vi
      */
     private void populateUIView(ViewHolder holder, Step recipeStep, int position) {
         // Set Recipe Step Number
-        holder.recipeStepNumber.setText(String.valueOf(position));
+        holder.recipeStepNumber.setText(String.valueOf(recipeStep.getId()));
         // Set Recipe Step shortDescription
-        holder.recipeStepDescription.setText(recipeStep.getShortDescription());
+        if(TextUtils.isEmpty(recipeStep.getShortDescription())) {
+            holder.recipeStepDescription.setText(mContext.getString(R.string.empty_description));
+            holder.recipeStepDescription.setTextColor(Color.parseColor("#ff0000"));
+        } else {
+            holder.recipeStepDescription.setText(recipeStep.getShortDescription());
+            holder.recipeStepDescription.setTextColor(Color.parseColor("#000000"));
+        }
     }
 
 

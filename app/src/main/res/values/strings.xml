@@ -13,6 +13,13 @@
     <string name="previous_recipe_step">Prev Step</string>
     <string name="next_recipe_step">Next Step</string>
 
+    <!-- JSON Error Handling -->
+    <string name="empty_ingredient">Empty ingredient</string>
+    <string name="empty_ingredient_measure">X</string>
+    <string name="empty_description">Empty description</string>
+    <string name="empty_video_url"></string>
+    <string name="empty_thumbnail_url"></string>
+
     <!-- Connectivity AlertDialog (Wifi/3G) strings -->
     <string name="network_failure">Network connection failure</string>
     <string name="network_user_choice">No active network connection. The application cannot run

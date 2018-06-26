@@ -1,6 +1,7 @@
 package com.udacity.mregtej.bakingapp.ui;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import com.udacity.mregtej.bakingapp.R;
 import com.udacity.mregtej.bakingapp.datamodel.Step;
+import com.udacity.mregtej.bakingapp.ui.utils.TextUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,8 +59,7 @@ public class RecipeStepDataDetailViewFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        mRecipeStepShortDescription.setText(mRecipeStep.getShortDescription());
-        mRecipeStepFullDescription.setText(mRecipeStep.getDescription());
+        updateUI();
     }
 
     @Override
@@ -116,8 +117,20 @@ public class RecipeStepDataDetailViewFragment extends Fragment {
     //--------------------------------------------------------------------------------|
 
     public void updateUI() {
-        mRecipeStepShortDescription.setText(mRecipeStep.getShortDescription());
-        mRecipeStepFullDescription.setText(mRecipeStep.getDescription());
+        if(TextUtils.isEmpty(mRecipeStep.getShortDescription())) {
+            mRecipeStepShortDescription.setText(getString(R.string.empty_description));
+            mRecipeStepShortDescription.setTextColor(Color.parseColor("#ff0000"));
+        } else {
+            mRecipeStepShortDescription.setText(mRecipeStep.getShortDescription());
+            mRecipeStepShortDescription.setTextColor(Color.parseColor("#000000"));
+        }
+        if(TextUtils.isEmpty(mRecipeStep.getDescription())) {
+            mRecipeStepFullDescription.setText(getString(R.string.empty_description));
+            mRecipeStepFullDescription.setTextColor(Color.parseColor("#ff0000"));
+        } else {
+            mRecipeStepFullDescription.setText(mRecipeStep.getDescription());
+            mRecipeStepFullDescription.setTextColor(Color.parseColor("#000000"));
+        }
     }
 
 

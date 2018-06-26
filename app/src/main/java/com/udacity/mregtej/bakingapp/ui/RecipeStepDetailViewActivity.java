@@ -4,9 +4,12 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -14,11 +17,13 @@ import com.udacity.mregtej.bakingapp.R;
 import com.udacity.mregtej.bakingapp.datamodel.Step;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import butterknife.ButterKnife;
 
 public class RecipeStepDetailViewActivity extends AppCompatActivity
-        implements RecipeStepDataDetailViewFragment.ChangeRecipeStepClickListener{
+        implements RecipeStepDataDetailViewFragment.ChangeRecipeStepClickListener {
 
     private static final String RECIPE_NAME_SAVED_INST = "recipe-name";
     private static final String RECIPE_STEPS_SAVED_INST = "recipe-step";
@@ -40,16 +45,8 @@ public class RecipeStepDetailViewActivity extends AppCompatActivity
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
-        switch(getResources().getConfiguration().orientation) {
-            case Configuration.ORIENTATION_LANDSCAPE:
-                requestWindowFeature(Window.FEATURE_NO_TITLE);
-                getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                        WindowManager.LayoutParams.FLAG_FULLSCREEN);
-                break;
-            default:
-            case Configuration.ORIENTATION_PORTRAIT:
-                break;
-        }
+        // Set FULLSCREEN for Landscape orientation
+        setFullScreenMode();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_recipe_step);
@@ -89,6 +86,7 @@ public class RecipeStepDetailViewActivity extends AppCompatActivity
 
     }
 
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putString(RECIPE_NAME_SAVED_INST, mRecipeName);
@@ -106,6 +104,19 @@ public class RecipeStepDetailViewActivity extends AppCompatActivity
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setFullScreenMode() {
+        switch(getResources().getConfiguration().orientation) {
+            case Configuration.ORIENTATION_LANDSCAPE:
+                requestWindowFeature(Window.FEATURE_NO_TITLE);
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                        WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                break;
+            default:
+            case Configuration.ORIENTATION_PORTRAIT:
+                break;
+        }
     }
 
     private void populateUIFragments() {
@@ -126,6 +137,7 @@ public class RecipeStepDetailViewActivity extends AppCompatActivity
             mRecipeStepDataDetailViewFragment.setmRecipeStep(mRecipeSteps.get(mRecipeStepPosition));
         }
 
+        // Hide ActionBar on Landscape (FULLSCREEN mode)
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             mActionBar.hide();
         } else {

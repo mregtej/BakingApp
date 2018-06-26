@@ -100,7 +100,7 @@ public class DetailRecipeStepsFragment extends Fragment
     }
 
     public void setRecipeSteps(List<Step> recipeSteps) {
-        mRecipeStepsAdapter.setmRecipeSteps(recipeSteps);
+        mRecipeStepsAdapter.setmRecipeSteps(checkRecipeStepsConsistency(recipeSteps));
         mRecipeStepsRecyclerView.setAdapter(mRecipeStepsAdapter);
         mRecipeStepsAdapter.notifyDataSetChanged();
     }
@@ -147,4 +147,25 @@ public class DetailRecipeStepsFragment extends Fragment
         }
         this.startActivity(i);
     }
+
+    private List<Step> checkRecipeStepsConsistency(List<Step> recipeSteps) {
+        ArrayList<Step> wellFormatedRecipeSteps = new ArrayList<>();
+        int idKeyCounter = 0;
+        for(int i = 0; i < recipeSteps.size(); i++) {
+            if(recipeSteps.get(i).getId() == idKeyCounter) {
+                wellFormatedRecipeSteps.add(recipeSteps.get(i));
+                idKeyCounter++;
+            } else {
+                do {
+                    wellFormatedRecipeSteps.add(new Step(idKeyCounter, "",
+                            "", "", ""));
+                    idKeyCounter++;
+                } while (idKeyCounter != recipeSteps.get(i).getId());
+                wellFormatedRecipeSteps.add(recipeSteps.get(i));
+                idKeyCounter++;
+            }
+        }
+        return wellFormatedRecipeSteps;
+    }
+
 }
