@@ -6,28 +6,42 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
 
 import com.udacity.mregtej.bakingapp.R;
 import com.udacity.mregtej.bakingapp.datamodel.Recipe;
-import com.udacity.mregtej.bakingapp.datamodel.Step;
-import com.udacity.mregtej.bakingapp.ui.adapter.RecipeStepAdapter;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class DetailRecipeActivity extends AppCompatActivity {
 
-    private static final String RECIPE_SAVED_INST = "recipe";
+    //--------------------------------------------------------------------------------|
+    //                                 Constants                                      |
+    //--------------------------------------------------------------------------------|
 
+    /** Key for storing the recipe in savedInstanceState */
+    private static final String RECIPE_KEY = "recipe";
+    /** Key for storing the recipe list in Intent.Extras (Bundle) */
     private static final String RECIPE_EXTRA = "recipe";
 
-    private Recipe mRecipe;
-    private ActionBar mActionBar;
 
+    //--------------------------------------------------------------------------------|
+    //                                 Constants                                      |
+    //--------------------------------------------------------------------------------|
+
+    /** Recipe object (From DataModel) */
+    private Recipe mRecipe;
+
+    /** Activity ActionBar */
+    private ActionBar mActionBar;
+    /** Recipe Ingredients Fragment (GridView) */
     private DetailRecipeIngredientsFragment mDetailRecipeIngredientsFragment;
+    /** Recipe Steps Fragment (GridView) */
     private DetailRecipeStepsFragment mDetailRecipeStepsFragment;
+
+
+    //--------------------------------------------------------------------------------|
+    //                            Override Methods                                    |
+    //--------------------------------------------------------------------------------|
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +56,7 @@ public class DetailRecipeActivity extends AppCompatActivity {
 
         if(savedInstanceState != null) {
 
-            mRecipe = savedInstanceState.getParcelable(RECIPE_SAVED_INST);
+            mRecipe = savedInstanceState.getParcelable(RECIPE_KEY);
 
         } else {
 
@@ -67,7 +81,7 @@ public class DetailRecipeActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putParcelable(RECIPE_SAVED_INST, mRecipe);
+        outState.putParcelable(RECIPE_KEY, mRecipe);
         super.onSaveInstanceState(outState);
     }
 
@@ -82,6 +96,14 @@ public class DetailRecipeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    //--------------------------------------------------------------------------------|
+    //                            Override Methods                                    |
+    //--------------------------------------------------------------------------------|
+
+    /**
+     * Populate Fragments with ModelInfo (Activity --> Fragment Comm)
+     */
     private void populateUIFragments() {
 
         mDetailRecipeIngredientsFragment = (DetailRecipeIngredientsFragment)

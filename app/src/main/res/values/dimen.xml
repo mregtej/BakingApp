@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="fragment_ingredients_layout_marginHorizontal">8dp</dimen>
+    <dimen name="fragment_recipe_steps_layout_marginHorizontal">8dp</dimen>
+    <dimen name="fragment_recipe_steps_layout_marginTop">4dp</dimen>
+    <dimen name="fragment_recipe_step_video_height">198dp</dimen>
+    <dimen name="fragment_recipe_step_video_marginHorizontal">8dp</dimen>
+    <dimen name="fragment_recipe_step_video_marginTop">10dp</dimen>
+    <dimen name="fragment_recipe_step_data_marginHorizontal">8dp</dimen>
+    <dimen name="fragment_recipe_step_data_marginVertical">8dp</dimen>
+    <dimen name="fragment_detail_recipe_ingredients_tablet_portrait_width">280dp</dimen>
+    <dimen name="fragment_detail_recipe_ingredients_tablet_portrait_marginStart">4dp</dimen>
+    <dimen name="fragment_detail_recipe_steps_tablet_portrait_marginVertical">8dp</dimen>
+    <dimen name="fragment_detail_recipe_step_video_tablet_portrait_height">280dp</dimen>
+    <dimen name="fragment_detail_recipe_step_data_tablet_portrait_marginVertical">8dp</dimen>
+    <dimen name="fragment_detail_recipe_ingredients_tablet_landscape_width">440dp</dimen>
+    <dimen name="fragment_detail_recipe_ingredients_tablet_landscape_marginStart">4dp</dimen>
+    <dimen name="fragment_detail_recipe_steps_tablet_landscape_marginVertical">4dp</dimen>
+    <dimen name="fragment_detail_recipe_step_video_tablet_landscape_height">320dp</dimen>
+    <dimen name="fragment_detail_recipe_step_data_tablet_landscape_marginTop">8dp</dimen>
+    <dimen name="fragment_detail_recipe_step_data_tablet_landscape_marginBottom">4dp</dimen>
+</resources>

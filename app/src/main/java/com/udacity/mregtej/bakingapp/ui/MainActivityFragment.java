@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -32,24 +33,49 @@ import butterknife.ButterKnife;
 public class MainActivityFragment extends Fragment
         implements RecipeCardAdapter.RecipeCardClickListener {
 
-    private static final String RECIPE_LIST_SAVED_INST = "recipe-list";
+    //--------------------------------------------------------------------------------|
+    //                                 Constants                                      |
+    //--------------------------------------------------------------------------------|
 
+    /** Key for storing the list state in savedInstanceState */
+    private static final String LIST_STATE_KEY = "list-state";
+    /** Key for storing the recipe list in savedInstanceState */
+    private static final String RECIPE_LIST_KEY = "recipe-list";
+    /** Key for storing the recipe list in Intent.Extras (Bundle) */
     private static final String RECIPE_EXTRA = "recipe";
+
+
+    //--------------------------------------------------------------------------------|
+    //                                 Parameters                                     |
+    //--------------------------------------------------------------------------------|
 
     /** RecyclerView LayoutManager instance */
     private RecyclerView.LayoutManager mRecipeCardLayoutManager;
-    /** Custom Recipe Card GridView (RecyclerView) */
-    @BindView(R.id.recipe_card_recyclerview) RecyclerView mRecipeCardRecyclerView;
+    /** List state stored in savedInstanceState */
+    private Parcelable mListState;
     /** Recipe ViewModel instance */
     private RecipeViewModel mRecipeViewModel;
     /** Recipe Card Custom ArrayAdapter */
     private RecipeCardAdapter mRecipeCardAdapter;
     /** Activity Context */
     private Context mContext;
-
+    /** Tablet size flag (App Tablet version) */
     private boolean tabletSize;
 
+    /** Custom Recipe Card GridView (RecyclerView) */
+    @BindView(R.id.recipe_card_recyclerview) RecyclerView mRecipeCardRecyclerView;
+
+
+    //--------------------------------------------------------------------------------|
+    //                                 Constructor                                    |
+    //--------------------------------------------------------------------------------|
+
     public MainActivityFragment() { }
+
+
+    //--------------------------------------------------------------------------------|
+    //                             Override Methods                                   |
+    //--------------------------------------------------------------------------------|
 
     @Nullable
     @Override
@@ -76,7 +102,7 @@ public class MainActivityFragment extends Fragment
             if(savedInstanceState != null) {
 
                 // Retrieve recipes from savedInstanceState
-                List<Recipe> recipes = savedInstanceState.getParcelableArrayList(RECIPE_LIST_SAVED_INST);
+                List<Recipe> recipes = savedInstanceState.getParcelableArrayList(RECIPE_LIST_KEY);
 
                 // Create RecipeCardAdapter (with recipes)
                 mRecipeCardAdapter = new RecipeCardAdapter(recipes, this);
@@ -105,9 +131,28 @@ public class MainActivityFragment extends Fragment
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        ArrayList<Recipe> recipes = (ArrayList<Recipe>)mRecipeCardAdapter.getmRecipeList();
-        outState.putParcelableArrayList(RECIPE_LIST_SAVED_INST, recipes);
+        super.onSaveInstanceState(outState);
+        mListState = mRecipeCardLayoutManager.onSaveInstanceState();
+        outState.putParcelableArrayList(RECIPE_LIST_KEY,
+                (ArrayList<Recipe>)mRecipeCardAdapter.getmRecipeList());
     }
+
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if(savedInstanceState != null) {
+            mListState = savedInstanceState.getParcelable(LIST_STATE_KEY);
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (mListState != null) {
+            mRecipeCardLayoutManager.onRestoreInstanceState(mListState);
+        }
+    }
+
 
     //--------------------------------------------------------------------------------|
     //                               UI View Methods                                  |
@@ -197,6 +242,14 @@ public class MainActivityFragment extends Fragment
         mRecipeCardRecyclerView.setLayoutManager(mRecipeCardLayoutManager);
     }
 
+
+    //--------------------------------------------------------------------------------|
+    //                               DataModel Methods                                |
+    //--------------------------------------------------------------------------------|
+
+    /**
+     * Registers the View into Recipe ViewModel to receive updated recipes (Observer pattern)
+     */
     private void registerToRecipeModel() {
         // Create RecipeViewModel Factory for param injection
         RecipeViewModel.Factory recipeFactory = new RecipeViewModel.Factory(
@@ -206,6 +259,9 @@ public class MainActivityFragment extends Fragment
                 .get(RecipeViewModel.class);
     }
 
+    /**
+     * Retrieve list of recipes from Recipe ViewModel (Observer pattern)
+     */
     private void getRecipes(){
         mRecipeViewModel.getRecipes().observe(this, new Observer<List<Recipe>>() {
             @Override
@@ -238,4 +294,5 @@ public class MainActivityFragment extends Fragment
         }
         this.startActivity(i);
     }
+
 }

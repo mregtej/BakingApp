@@ -3,6 +3,7 @@ package com.udacity.mregtej.bakingapp.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -28,6 +29,7 @@ import butterknife.ButterKnife;
 public class DetailRecipeStepsFragment extends Fragment
         implements RecipeStepAdapter.RecipeStepClickListener {
 
+    private static final String LIST_STATE_SAVED_INST = "list-state";
     private static final String RECIPE_STEPS_SAVED_INST = "recipe-steps";
     private static final String RECIPE_STEPS_EXPANDED_SAVED_INST = "is-steps-expanded";
 
@@ -39,6 +41,8 @@ public class DetailRecipeStepsFragment extends Fragment
 
     /** RecyclerView LayoutManager instance */
     private RecyclerView.LayoutManager mRecipeStepsLayoutManager;
+    /** List state stored in savedInstanceState */
+    private Parcelable mListState;
     /** Recipe Ingredients Custom ArrayAdapter */
     private RecipeStepAdapter mRecipeStepsAdapter;
     /** Custom Recipe Card GridView (RecyclerView) */
@@ -112,10 +116,27 @@ public class DetailRecipeStepsFragment extends Fragment
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        ArrayList<Step> recipeSteps = (ArrayList<Step>) mRecipeStepsAdapter.getmRecipeSteps();
-        outState.putParcelableArrayList(RECIPE_STEPS_SAVED_INST, recipeSteps);
+        mListState = mRecipeStepsLayoutManager.onSaveInstanceState();
+        outState.putParcelableArrayList(RECIPE_STEPS_SAVED_INST,
+                (ArrayList<Step>) mRecipeStepsAdapter.getmRecipeSteps());
         outState.putBoolean(RECIPE_STEPS_EXPANDED_SAVED_INST, isStepsRecyclerViewExpanded);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if(savedInstanceState != null) {
+            mListState = savedInstanceState.getParcelable(LIST_STATE_SAVED_INST);
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (mListState != null) {
+            mRecipeStepsLayoutManager.onRestoreInstanceState(mListState);
+        }
     }
 
     public void setmRecipeName(String mRecipeName) {

@@ -2,6 +2,7 @@ package com.udacity.mregtej.bakingapp.ui;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -26,25 +27,51 @@ import butterknife.ButterKnife;
 
 public class DetailRecipeIngredientsFragment extends Fragment {
 
-    private static final String RECIPE_INGREDIENTS_SAVED_INST = "ingredients";
-    private static final String RECIPE_INGREDIENTS_EXPANDED_SAVED_INST = "is-ingredients-expanded";
+    //--------------------------------------------------------------------------------|
+    //                                 Constants                                      |
+    //--------------------------------------------------------------------------------|
 
+    /** Key for storing the list state in savedInstanceState */
+    private static final String LIST_STATE_KEY = "list-state";
+    /** Key for storing the recipe ingredients in savedInstanceState */
+    private static final String RECIPE_INGREDIENTS_KEY = "ingredients";
+    /** Key for storing the expand/collapse status of the recipe ingr. list in savedInstanceState */
+    private static final String RECIPE_INGREDIENTS_EXPANDED_KEY = "is-ingredients-expanded";
+
+
+    //--------------------------------------------------------------------------------|
+    //                                 Parameters                                     |
+    //--------------------------------------------------------------------------------|
+
+    /** Flag for storing if ngredientsRecyclerView is expanded */
     private boolean isIngredientsRecyclerViewExpanded;
-
     /** RecyclerView LayoutManager instance */
     private RecyclerView.LayoutManager mRecipeIngredientsLayoutManager;
     /** Recipe Ingredients Custom ArrayAdapter */
     private RecipeIngredientAdapter mRecipeIngredientsAdapter;
-    /** Custom Recipe Card GridView (RecyclerView) */
-    @BindView(R.id.recipe_ingredients_recyclerview) RecyclerView mRecipeIngredientsRecyclerView;
-    @BindView(R.id.ib_expand_collapse_ingredients_rv) ImageView mCollapseIngredientsImageView;
+    /** List state stored in savedInstanceState */
+    private Parcelable mListState;
     /** Activity Context */
     private Context mContext;
-
-    private View rootView;
+    /** Tablet size flag (App Tablet version) */
     private boolean tabletSize;
 
+    /** Custom Recipe Card GridView (RecyclerView) */
+    @BindView(R.id.recipe_ingredients_recyclerview) RecyclerView mRecipeIngredientsRecyclerView;
+    /** Expand/Collapse GridView Button (RecyclerView) */
+    @BindView(R.id.ib_expand_collapse_ingredients_rv) ImageView mCollapseIngredientsImageView;
+
+
+    //--------------------------------------------------------------------------------|
+    //                                 Constructor                                    |
+    //--------------------------------------------------------------------------------|
+
     public DetailRecipeIngredientsFragment() { }
+
+
+    //--------------------------------------------------------------------------------|
+    //                               Override Methods                                 |
+    //--------------------------------------------------------------------------------|
 
     @Nullable
     @Override
@@ -52,7 +79,7 @@ public class DetailRecipeIngredientsFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
 
         // Bind Views
-        rootView = inflater.inflate(R.layout.fragment_recipe_ingredients, container,
+        View rootView = inflater.inflate(R.layout.fragment_recipe_ingredients, container,
                 false);
         ButterKnife.bind(this, rootView);
         mContext = rootView.getContext();
@@ -66,9 +93,9 @@ public class DetailRecipeIngredientsFragment extends Fragment {
 
             // Retrieve list of ingredients from savedInstanceState
             List<Ingredient> ingredients = savedInstanceState.
-                    getParcelableArrayList(RECIPE_INGREDIENTS_SAVED_INST);
+                    getParcelableArrayList(RECIPE_INGREDIENTS_KEY);
             isIngredientsRecyclerViewExpanded = savedInstanceState.
-                    getBoolean(RECIPE_INGREDIENTS_EXPANDED_SAVED_INST);
+                    getBoolean(RECIPE_INGREDIENTS_EXPANDED_KEY);
             setRecyclerViewVisibility(isIngredientsRecyclerViewExpanded);
 
             // Create RecipeIngredientAdapter (with ingredients)
@@ -103,11 +130,33 @@ public class DetailRecipeIngredientsFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        ArrayList<Ingredient> ingredients = (ArrayList<Ingredient>) mRecipeIngredientsAdapter.getmIngredients();
-        outState.putParcelableArrayList(RECIPE_INGREDIENTS_SAVED_INST, ingredients);
-        outState.putBoolean(RECIPE_INGREDIENTS_EXPANDED_SAVED_INST, isIngredientsRecyclerViewExpanded);
         super.onSaveInstanceState(outState);
+        mListState = mRecipeIngredientsLayoutManager.onSaveInstanceState();
+        outState.putParcelable(LIST_STATE_KEY, mListState);
+        outState.putParcelableArrayList(RECIPE_INGREDIENTS_KEY,
+                (ArrayList<Ingredient>) mRecipeIngredientsAdapter.getmIngredients());
+        outState.putBoolean(RECIPE_INGREDIENTS_EXPANDED_KEY, isIngredientsRecyclerViewExpanded);
     }
+
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if(savedInstanceState != null) {
+            mListState = savedInstanceState.getParcelable(LIST_STATE_KEY);
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (mListState != null) {
+            mRecipeIngredientsLayoutManager.onRestoreInstanceState(mListState);
+        }
+    }
+
+    //--------------------------------------------------------------------------------|
+    //                               Getters / Setters                                |
+    //--------------------------------------------------------------------------------|
 
     public void setRecipeIngredients(List<Ingredient> ingredients) {
         mRecipeIngredientsAdapter.setmIngredients(ingredients);
@@ -115,6 +164,16 @@ public class DetailRecipeIngredientsFragment extends Fragment {
         mRecipeIngredientsAdapter.notifyDataSetChanged();
     }
 
+
+    //--------------------------------------------------------------------------------|
+    //                                  UI Methods                                    |
+    //--------------------------------------------------------------------------------|
+
+    /**
+     * Expand / Collapse RecyclerView
+     *
+     * @param isExpanded    RecyclerView visible state
+     */
     private void setRecyclerViewVisibility(boolean isExpanded) {
         if(isExpanded) {
             ViewUtils.expandView(mRecipeIngredientsRecyclerView);
@@ -149,6 +208,9 @@ public class DetailRecipeIngredientsFragment extends Fragment {
         mRecipeIngredientsRecyclerView.setLayoutManager(mRecipeIngredientsLayoutManager);
     }
 
+    /**
+     * Set Expand/Collapse GridView Button listener
+     */
     private void setCollapseViewClickListeners() {
 
         // Set Expand/Collapse OnClick action for Ingredients RecyclerView
@@ -167,6 +229,9 @@ public class DetailRecipeIngredientsFragment extends Fragment {
 
     }
 
+    /**
+     * Update UI status of Expand/Collapse GridView Button
+     */
     private void updateStatusCollapseView() {
         // Handle expansion / collapse of RecyclerViews
         if(isIngredientsRecyclerViewExpanded) {
