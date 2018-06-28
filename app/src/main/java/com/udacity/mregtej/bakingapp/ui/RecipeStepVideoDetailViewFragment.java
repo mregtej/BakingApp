@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
@@ -44,11 +45,15 @@ public class RecipeStepVideoDetailViewFragment extends Fragment {
     @BindView(R.id.ev_recipe_step_video) SimpleExoPlayerView mSimpleExoPlayerView;
 
     private static final String RECIPE_STEPS_SAVED_INSTANCE = "recipe-step";
+    private static final String RECIPE_VIDEO_IS_PLAYING_KEY = "recipe-video-is-playing";
+    private static final String RECIPE_VIDEO_POSITION_KEY = "recipe-video-position";
 
     private SimpleExoPlayer player;
 
     private Step mRecipeStep;
     private Context mContext;
+
+    private long mVideoPosition;
 
     private Timeline.Window window;
     private DataSource.Factory mediaDataSourceFactory;
@@ -68,15 +73,23 @@ public class RecipeStepVideoDetailViewFragment extends Fragment {
         ButterKnife.bind(this, rootView);
         mContext = rootView.getContext();
 
+        // Initialize video position (min value)
+        mVideoPosition = C.TIME_UNSET;
+
         if(savedInstanceState != null) {
             mRecipeStep = savedInstanceState.getParcelable(RECIPE_STEPS_SAVED_INSTANCE);
+            mVideoPosition = savedInstanceState.getLong(RECIPE_VIDEO_POSITION_KEY, C.TIME_UNSET);
+            shouldAutoPlay = savedInstanceState.getBoolean(RECIPE_VIDEO_IS_PLAYING_KEY, true);
+        } else {
+            // Set-up ExoPlayer
+            shouldAutoPlay = true;
+            mVideoPosition = C.TIME_UNSET;
         }
 
         // Set-up ExoPlayer
-        shouldAutoPlay = true;
         bandwidthMeter = new DefaultBandwidthMeter();
-        mediaDataSourceFactory = new DefaultDataSourceFactory(
-                mContext, Util.getUserAgent(mContext,"BakingApp"),
+        mediaDataSourceFactory = new DefaultDataSourceFactory(mContext,
+                Util.getUserAgent(mContext, "BakingApp"),
                 (TransferListener<? super DataSource>) bandwidthMeter);
         window = new Timeline.Window();
 
@@ -86,6 +99,8 @@ public class RecipeStepVideoDetailViewFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putBoolean(RECIPE_VIDEO_IS_PLAYING_KEY, player.getPlayWhenReady());
+        outState.putLong(RECIPE_VIDEO_POSITION_KEY, mVideoPosition);
         outState.putParcelable(RECIPE_STEPS_SAVED_INSTANCE, mRecipeStep);
         super.onSaveInstanceState(outState);
     }
@@ -104,6 +119,9 @@ public class RecipeStepVideoDetailViewFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        if(mVideoPosition != C.TIME_UNSET) {
+            player.seekTo(mVideoPosition);
+        }
         if ((Util.SDK_INT <= 23 || player == null)) {
             initializePlayer();
         }
@@ -112,10 +130,15 @@ public class RecipeStepVideoDetailViewFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        if (Util.SDK_INT <= 23) {
-            releasePlayer();
+        if(player != null) {
+            mVideoPosition = player.getCurrentPosition();
+            if (Util.SDK_INT <= 23) {
+                releasePlayer();
+            }
         }
     }
+
+
 
     @Override
     public void onStop() {
@@ -184,6 +207,7 @@ public class RecipeStepVideoDetailViewFragment extends Fragment {
                     .into(mVideoNotAvailableImageView);
             mVideoNotAvailableImageView.setVisibility(View.VISIBLE);
         }
+
 
     }
 
