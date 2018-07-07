@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.udacity.mregtej.bakingapp.R;
 import com.udacity.mregtej.bakingapp.datamodel.Recipe;
+import com.udacity.mregtej.bakingapp.ui.utils.TextUtils;
 
 import java.util.List;
 
@@ -112,16 +113,30 @@ public class RecipeCardAdapter extends RecyclerView.Adapter<RecipeCardAdapter.Vi
      * @param recipe    Recipe object
      */
     private void populateUIView(ViewHolder holder, Recipe recipe) {
-        // TODO Fill image with Recipe.Image data from DataModel
-        Picasso
-                .with(mContext)
-                .load(R.drawable.im_baking)
-                .fit()
-                .centerCrop()
-                // .error(R.drawable.im_image_not_available)
-                .into(holder.recipePhoto);
+        // Fill image with Recipe.Image data from DataModel (or default baking image)
+        handleRecipeImageFromDataModel(holder, recipe.getImage());
+
         // Set Recipe name
         holder.recipeName.setText(recipe.getName());
+    }
+
+    private void handleRecipeImageFromDataModel(ViewHolder holder, String recipe_image) {
+        if(!TextUtils.isEmpty(recipe_image)) {
+            Picasso
+                    .with(mContext)
+                    .load(recipe_image)
+                    .fit()
+                    .centerCrop()
+                    .error(R.drawable.im_baking)
+                    .into(holder.recipePhoto);
+        } else {
+            Picasso
+                    .with(mContext)
+                    .load(R.drawable.im_baking)
+                    .fit()
+                    .centerCrop()
+                    .into(holder.recipePhoto);
+        }
     }
 
 
