@@ -1,8 +1,13 @@
 package com.udacity.mregtej.bakingapp.ui;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -109,7 +114,7 @@ public class RecipeStepVideoDetailViewFragment extends Fragment {
     public void onStart() {
         super.onStart();
         if (Util.SDK_INT > 23) {
-            if(player != null && player.isLoading()) {
+            if(player != null /* && player.isLoading() */) {
                 player.stop();
             }
             initializePlayer();
@@ -138,8 +143,6 @@ public class RecipeStepVideoDetailViewFragment extends Fragment {
         }
     }
 
-
-
     @Override
     public void onStop() {
         super.onStop();
@@ -163,13 +166,48 @@ public class RecipeStepVideoDetailViewFragment extends Fragment {
 
     public void updateUI() {
         if (Util.SDK_INT > 23) {
-            if(player != null && player.isLoading()) {
+            if(player != null /* && player.isLoading() */) {
                 player.stop();
             }
             initializePlayer();
         }
     }
 
+
+    private void loadVideoMediaFile(final DefaultExtractorsFactory extractorsFactory) {
+        long delayMillis = 100;
+        // 1. Check video-url is not empty and is video content (mp4 and 3gp supported videos)
+        final String videoURL = handleVideoURL(mRecipeStep.getVideoURL());
+        if(videoURL != null) {
+            // 2. Load Thumbnail (only if video has't not yet been played)
+            if(mVideoPosition == C.TIME_UNSET) {
+                handleVideoThumbnail();
+                // Added some delay to display thumbnail
+                delayMillis = 1000;
+            }
+            // 3. Prepare loading of video media source (
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    MediaSource mediaSource = new ExtractorMediaSource(Uri.parse(videoURL),
+                            mediaDataSourceFactory, extractorsFactory, null, null);
+                    player.prepare(mediaSource);
+                    mVideoNotAvailableImageView.setVisibility(View.INVISIBLE);
+                }
+            }, delayMillis);
+
+        } else {
+            // 4. There is no available video. Load default image
+            Picasso
+                    .with(mContext)
+                    .load(R.drawable.ic_video_not_available)
+                    .fit()
+                    .centerCrop()
+                    .into(mVideoNotAvailableImageView);
+            mVideoNotAvailableImageView.setVisibility(View.VISIBLE);
+        }
+    }
 
     //--------------------------------------------------------------------------------|
     //                            ExoPlayer Methods                                   |
@@ -193,21 +231,8 @@ public class RecipeStepVideoDetailViewFragment extends Fragment {
 
         DefaultExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
 
-        String videoURL = handleVideoURL(mRecipeStep.getVideoURL());
-        if(videoURL != null) {
-            MediaSource mediaSource = new ExtractorMediaSource(Uri.parse(videoURL),
-                    mediaDataSourceFactory, extractorsFactory, null, null);
-            player.prepare(mediaSource);
-        } else {
-            Picasso
-                    .with(mContext)
-                    .load(R.drawable.ic_video_not_available)
-                    .fit()
-                    .centerCrop()
-                    .into(mVideoNotAvailableImageView);
-            mVideoNotAvailableImageView.setVisibility(View.VISIBLE);
-        }
-
+        // Load video media content
+        loadVideoMediaFile(extractorsFactory);
 
     }
 
@@ -224,6 +249,28 @@ public class RecipeStepVideoDetailViewFragment extends Fragment {
         if(TextUtils.isEmpty(url)) { return null; }
         if (url.contains(".mp4") || url.contains(".3gp")) { return url; }
         return null;
+    }
+
+    private void handleVideoThumbnail() {
+        String thumbnailURL = mRecipeStep.getThumbnailURL();
+        if (!TextUtils.isEmpty(thumbnailURL)) {
+            Picasso
+                    .with(mContext)
+                    .load(thumbnailURL)
+                    .fit()
+                    .centerCrop()
+                    .error(R.drawable.im_no_thumbnail)
+                    .into(mVideoNotAvailableImageView);
+        } else {
+            // 2.1 Load default not available thumbnail image
+            Picasso
+                    .with(mContext)
+                    .load(R.drawable.im_no_thumbnail)
+                    .fit()
+                    .centerCrop()
+                    .into(mVideoNotAvailableImageView);
+        }
+        mVideoNotAvailableImageView.setVisibility(View.VISIBLE);
     }
 
 }
