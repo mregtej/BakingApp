@@ -28,4 +28,7 @@
     <string name="network_user_choice_3g">Enable 3G</string>
     <string name="network_user_choice_wifi">Enable Wi-Fi</string>
 
+    <!-- Espresso testing -->
+    <string name="brownies_title">Brownies</string>
+
 </resources>
