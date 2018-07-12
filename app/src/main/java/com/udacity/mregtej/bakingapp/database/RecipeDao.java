@@ -7,29 +7,43 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
+import android.database.Cursor;
 
 import com.udacity.mregtej.bakingapp.datamodel.Recipe;
+import com.udacity.mregtej.bakingapp.provider.RecipeContract;
 
 import java.util.List;
 
 @Dao
 public interface RecipeDao {
 
-    @Query("SELECT * FROM recipe")
+    @Query("SELECT * FROM " + RecipeContract.RecipeEntry.TABLE_NAME)
     LiveData<List<Recipe>> getRecipes();
 
-    @Query("SELECT * FROM recipe where name LIKE :name")
-    Recipe findRecipeByName(String name);
+    @Query("SELECT * FROM " + RecipeContract.RecipeEntry.TABLE_NAME)
+    Cursor getRecipesViaCP();
 
-    @Query("SELECT COUNT(*) from recipe")
+    @Query("SELECT * FROM " + RecipeContract.RecipeEntry.TABLE_NAME +
+            " WHERE " + RecipeContract.RecipeEntry.COLUMN_ID + " = :id")
+    Cursor findRecipeById(long id);
+
+    @Query("SELECT COUNT(*) FROM " + RecipeContract.RecipeEntry.TABLE_NAME)
     int countRecipes();
 
     @Update
-    void updateRecipes(List<Recipe> recipes);
+    int updateRecipe(Recipe recipe);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertRecipes(List<Recipe> recipes);
+    long insertRecipe(Recipe recipe);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    long[] insertRecipes(List<Recipe> recipes);
 
     @Delete
     void deleteRecipe(Recipe recipe);
+
+    @Query("DELETE FROM " + RecipeContract.RecipeEntry.TABLE_NAME +
+            " WHERE " + RecipeContract.RecipeEntry.COLUMN_ID + " = :id")
+    int deleteRecipeById(long id);
+
 }

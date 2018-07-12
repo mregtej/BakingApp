@@ -14,7 +14,7 @@ import com.udacity.mregtej.bakingapp.datamodel.Recipe;
 
 import java.util.List;
 
-@Database(entities = {Recipe.class}, version = 1, exportSchema = false)
+@Database(entities = {Recipe.class}, version = 2, exportSchema = true)
 public abstract class RecipeDatabase extends RoomDatabase {
 
     private static final String DATABASE_NAME = "recipe-database";
@@ -66,7 +66,9 @@ public abstract class RecipeDatabase extends RoomDatabase {
                             database.setDatabaseCreated();
                         });
                     }
-                }).build();
+                })
+                .fallbackToDestructiveMigration()
+                .build();
     }
 
     /**

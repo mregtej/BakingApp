@@ -4,42 +4,48 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
+import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.provider.BaseColumns;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.udacity.mregtej.bakingapp.database.RecipeConverters;
+import com.udacity.mregtej.bakingapp.provider.RecipeContract;
 
 import java.util.List;
 
-@Entity(tableName = "recipe")
+@Entity(tableName = RecipeContract.RecipeEntry.TABLE_NAME)
 public class Recipe implements Parcelable {
 
     @PrimaryKey(autoGenerate = false)
-    @SerializedName("id")
+    @ColumnInfo(index = true, name = RecipeContract.RecipeEntry.COLUMN_ID)
+    @SerializedName(RecipeContract.RecipeEntry.COLUMN_ID)
     @Expose
     private Integer id;
-    @ColumnInfo(name = "name")
-    @SerializedName("name")
+    @ColumnInfo(name = RecipeContract.RecipeEntry.COLUMN_NAME)
+    @SerializedName(RecipeContract.RecipeEntry.COLUMN_NAME)
     @Expose
     private String name;
     @TypeConverters(RecipeConverters.class)
-    @SerializedName("ingredients")
+    @SerializedName(RecipeContract.RecipeEntry.COLUMN_INGREDIENTS)
     @Expose
     private List<Ingredient> ingredients = null;
     @TypeConverters(RecipeConverters.class)
-    @SerializedName("steps")
+    @SerializedName(RecipeContract.RecipeEntry.COLUMN_STEPS)
     @Expose
     private List<Step> steps = null;
-    @ColumnInfo(name = "servings")
-    @SerializedName("servings")
+    @ColumnInfo(name = RecipeContract.RecipeEntry.COLUMN_SERVINGS)
+    @SerializedName(RecipeContract.RecipeEntry.COLUMN_SERVINGS)
     @Expose
     private Integer servings;
-    @ColumnInfo(name = "image")
-    @SerializedName("image")
+    @ColumnInfo(name = RecipeContract.RecipeEntry.COLUMN_IMAGE)
+    @SerializedName(RecipeContract.RecipeEntry.COLUMN_IMAGE)
     @Expose
     private String image;
+
+    public Recipe() {}
 
     public Recipe(Integer id, String name, List<Ingredient> ingredients, List<Step> steps,
                   Integer servings, String image) {
@@ -135,5 +141,22 @@ public class Recipe implements Parcelable {
         this.image = image;
     }
 
+
+    public static Recipe fromContentValues(ContentValues values) {
+        final Recipe recipe = new Recipe();
+        if (values.containsKey(RecipeContract.RecipeEntry.COLUMN_ID)) {
+            recipe.id = values.getAsInteger(RecipeContract.RecipeEntry.COLUMN_ID);
+        }
+        if (values.containsKey(RecipeContract.RecipeEntry.COLUMN_NAME)) {
+            recipe.name = values.getAsString(RecipeContract.RecipeEntry.COLUMN_NAME);
+        }
+        if (values.containsKey(RecipeContract.RecipeEntry.COLUMN_SERVINGS)) {
+            recipe.servings = values.getAsInteger(RecipeContract.RecipeEntry.COLUMN_SERVINGS);
+        }
+        if (values.containsKey(RecipeContract.RecipeEntry.COLUMN_IMAGE)) {
+            recipe.image = values.getAsString(RecipeContract.RecipeEntry.COLUMN_IMAGE);
+        }
+        return recipe;
+    }
 }
 
