@@ -1,30 +1,42 @@
 package com.udacity.mregtej.bakingapp.datamodel;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.TypeConverters;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.udacity.mregtej.bakingapp.database.RecipeConverters;
 
 import java.util.List;
 
+@Entity(tableName = "recipe")
 public class Recipe implements Parcelable {
 
+    @PrimaryKey(autoGenerate = false)
     @SerializedName("id")
     @Expose
     private Integer id;
+    @ColumnInfo(name = "name")
     @SerializedName("name")
     @Expose
     private String name;
+    @TypeConverters(RecipeConverters.class)
     @SerializedName("ingredients")
     @Expose
     private List<Ingredient> ingredients = null;
+    @TypeConverters(RecipeConverters.class)
     @SerializedName("steps")
     @Expose
     private List<Step> steps = null;
+    @ColumnInfo(name = "servings")
     @SerializedName("servings")
     @Expose
     private Integer servings;
+    @ColumnInfo(name = "image")
     @SerializedName("image")
     @Expose
     private String image;

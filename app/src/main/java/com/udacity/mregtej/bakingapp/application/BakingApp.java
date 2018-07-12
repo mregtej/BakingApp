@@ -3,6 +3,7 @@ package com.udacity.mregtej.bakingapp.application;
 import android.app.Application;
 
 import com.udacity.mregtej.bakingapp.comm.ConnectivityHandler;
+import com.udacity.mregtej.bakingapp.database.RecipeDatabase;
 import com.udacity.mregtej.bakingapp.repository.RecipeRepository;
 
 public class BakingApp extends Application {
@@ -22,7 +23,11 @@ public class BakingApp extends Application {
     }
 
     public RecipeRepository getRepository() {
-        return RecipeRepository.getInstance(mBakingAppExecutors);
+        return RecipeRepository.getInstance(getDatabase(), mBakingAppExecutors);
+    }
+
+    public RecipeDatabase getDatabase() {
+        return RecipeDatabase.getInstance(this, mBakingAppExecutors);
     }
 
     public void setConnectivityListener(ConnectivityHandler.ConnectivityHandlerListener listener) {
