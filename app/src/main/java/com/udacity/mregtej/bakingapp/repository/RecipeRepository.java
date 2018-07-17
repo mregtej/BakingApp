@@ -2,7 +2,6 @@ package com.udacity.mregtej.bakingapp.repository;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MediatorLiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.util.Log;
 
 import com.udacity.mregtej.bakingapp.application.BakingAppExecutors;
@@ -93,9 +92,6 @@ public class RecipeRepository {
 
             @Override
             public void run() {
-
-                // TODO check if recipes were fetched recently in order to
-                // minimize the number of HTTP calls
 
                 // Calling JSON
                 Call<List<Recipe>> call = api.getRecipeJSON();

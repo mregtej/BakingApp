@@ -22,6 +22,7 @@ import com.udacity.mregtej.bakingapp.datamodel.Recipe;
 import com.udacity.mregtej.bakingapp.global.BakingAppGlobals;
 import com.udacity.mregtej.bakingapp.ui.adapter.RecipeCardAdapter;
 import com.udacity.mregtej.bakingapp.ui.dialog.AlertDialogHelper;
+import com.udacity.mregtej.bakingapp.ui.widget.BakingAppWidgetService;
 import com.udacity.mregtej.bakingapp.viewmodel.RecipeViewModel;
 
 import java.util.ArrayList;
@@ -261,6 +262,8 @@ public class MainActivityFragment extends Fragment
 
     /**
      * Retrieve list of recipes from Recipe ViewModel (Observer pattern)
+     *
+     * TODO Implement a user-friendly data-refresh mechanism (e.g. scrolling down on the main screen)
      */
     private void getRecipes(){
         mRecipeViewModel.getRecipes().observe(this, new Observer<List<Recipe>>() {
@@ -292,6 +295,9 @@ public class MainActivityFragment extends Fragment
         if(recipe != null) {
             i.putExtra(RECIPE_EXTRA, recipe);
         }
+        // Update the Widget info
+        // TODO store last opened recipe in OnSharedPreferences and implement Broacast to update the widget
+        BakingAppWidgetService.startActionUpdateRecipe(mContext, recipe.getId());
         this.startActivity(i);
     }
 

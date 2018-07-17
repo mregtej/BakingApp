@@ -5,65 +5,86 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="40dp"
-    android:layout_margin="1dp"
-    android:weightSum="10"
+    android:layout_height="24dp"
+    android:weightSum="100"
+    android:layout_marginHorizontal="4dp"
     android:background="@drawable/dr_rectangle">
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="2"
+        android:layout_weight="10"
         android:layout_gravity="center"
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_gravity="center"
             android:contentDescription="@string/recipe_ingredient_content_description"
-            android:src="@mipmap/ic_ingredient" />
+            android:src="@mipmap/ic_ingredient_light" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="6"
-        android:layout_gravity="center"
+        android:layout_weight="60"
+        android:layout_gravity="left|start|center_vertical"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/tv_widget_ingredient_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="32dp"
             android:fontFamily="sans-serif"
             android:maxLines="2"
+            android:paddingHorizontal="2dp"
+            android:textColor="@android:color/white"
             android:text="@string/ingredient_name"
-            android:textSize="12sp" />
+            android:textSize="9sp" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_weight="2"
+        android:layout_weight="15"
+        android:layout_gravity="left|start|center_vertical"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/tv_widget_ingredient_quantity"
-            android:layout_width="60dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:fontFamily="sans-serif"
             android:maxLines="2"
+            android:paddingHorizontal="1dp"
+            android:textColor="@android:color/white"
             android:text="@string/ingredient_quantity"
-            android:textSize="12sp" />
+            android:textSize="8sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="15"
+        android:layout_gravity="left|start|center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_widget_ingredient_measure"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:maxLines="2"
+            android:paddingHorizontal="1dp"
+            android:textColor="@android:color/white"
+            android:text="@string/ingredient_quantity"
+            android:textSize="8sp" />
 
     </LinearLayout>
 

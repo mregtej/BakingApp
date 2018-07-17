@@ -15,7 +15,7 @@ public class RecipeContract {
       */
 
     /** The authority of this content provider. */
-    public static final String AUTHORITY = "com.udacity.mregtej.bakingapp.provider.provider";
+    public static final String AUTHORITY = "com.udacity.mregtej.bakingapp";
 
     /** The Base Content URI */
     public static final Uri BASE_CONTENT_URI = Uri.parse(
@@ -23,6 +23,15 @@ public class RecipeContract {
 
     /** The Path for the Recipe directory */
     public static final String RECIPE_PATH = RecipeEntry.TABLE_NAME;
+
+    /** Invalid Recipe ID */
+    public static final int INVALID_RECIPE_ID = -1;
+
+    /** Default Recipe ID */
+    public static final int DEFAULT_RECIPE_ID = 1;
+
+    /** Invalid Recipe servings */
+    public static final int INVALID_RECIPE_SERVINGS = -1;
 
     /* TaskEntry is an inner class that defines the contents of the task table */
     public static final class RecipeEntry implements BaseColumns {

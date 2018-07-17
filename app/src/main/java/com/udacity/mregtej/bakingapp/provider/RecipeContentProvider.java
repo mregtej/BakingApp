@@ -34,7 +34,7 @@ public class RecipeContentProvider extends ContentProvider {
 
     static {
         MATCHER.addURI(RecipeContract.AUTHORITY, RecipeContract.RecipeEntry.TABLE_NAME, CODE_RECIPE_DIR);
-        MATCHER.addURI(RecipeContract.AUTHORITY, RecipeContract.RecipeEntry.TABLE_NAME + "/*", CODE_RECIPE_ITEM);
+        MATCHER.addURI(RecipeContract.AUTHORITY, RecipeContract.RecipeEntry.TABLE_NAME + "/#", CODE_RECIPE_ITEM);
     }
 
     @Override

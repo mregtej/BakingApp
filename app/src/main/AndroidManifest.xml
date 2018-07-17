@@ -55,11 +55,16 @@
                 android:resource="@xml/bakingapp_widget_info" />
         </receiver>
 
+        <service android:name=".ui.widget.BakingAppWidgetService" />
+
+        <service android:name=".ui.widget.BakingAppListWidgetIngredientsService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"
+            android:exported="false" />
+
         <provider
             android:name=".provider.RecipeContentProvider"
-            android:authorities="com.udacity.mregtej.bakingapp.provider"
-            android:exported="true"
-            android:permission="com.udacity.mregtej.bakingapp.provider.READ_WRITE"/>
+            android:authorities="com.udacity.mregtej.bakingapp"
+            android:exported="true" />
 
     </application>
 

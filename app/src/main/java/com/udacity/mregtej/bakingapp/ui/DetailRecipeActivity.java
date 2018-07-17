@@ -21,7 +21,7 @@ public class DetailRecipeActivity extends AppCompatActivity {
     /** Key for storing the recipe in savedInstanceState */
     private static final String RECIPE_KEY = "recipe";
     /** Key for storing the recipe list in Intent.Extras (Bundle) */
-    private static final String RECIPE_EXTRA = "recipe";
+    public static final String RECIPE_EXTRA = "recipe";
 
 
     //--------------------------------------------------------------------------------|
