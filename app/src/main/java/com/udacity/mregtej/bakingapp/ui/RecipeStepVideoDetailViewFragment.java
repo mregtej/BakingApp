@@ -46,27 +46,56 @@ import butterknife.ButterKnife;
 
 public class RecipeStepVideoDetailViewFragment extends Fragment {
 
-    @BindView(R.id.iv_recipe_video_not_available) ImageView mVideoNotAvailableImageView;
-    @BindView(R.id.ev_recipe_step_video) SimpleExoPlayerView mSimpleExoPlayerView;
+    //--------------------------------------------------------------------------------|
+    //                                 Constants                                      |
+    //--------------------------------------------------------------------------------|
 
+    /** Key for storing the recipe steps in savedInstanceState */
     private static final String RECIPE_STEPS_SAVED_INSTANCE = "recipe-step";
+    /** Key for storing the recipe step video playing status in savedInstanceState */
     private static final String RECIPE_VIDEO_IS_PLAYING_KEY = "recipe-video-is-playing";
+    /** Key for storing the recipe step video time-position in savedInstanceState */
     private static final String RECIPE_VIDEO_POSITION_KEY = "recipe-video-position";
 
+
+    //--------------------------------------------------------------------------------|
+    //                                 Parameter                                      |
+    //--------------------------------------------------------------------------------|
+
+    /** Video not available & Thumbnail ImageView */
+    @BindView(R.id.iv_recipe_video_not_available) ImageView mVideoNotAvailableImageView;
+    /** Video frame */
+    @BindView(R.id.ev_recipe_step_video) SimpleExoPlayerView mSimpleExoPlayerView;
+    /** Video player */
     private SimpleExoPlayer player;
-
+    /** Recipe Step */
     private Step mRecipeStep;
+    /** App Context */
     private Context mContext;
-
+    /** Video time-position */
     private long mVideoPosition;
-
+    /** Video Window */
     private Timeline.Window window;
+    /** Media data source (Factory) */
     private DataSource.Factory mediaDataSourceFactory;
+    /** Video track selector */
     private DefaultTrackSelector trackSelector;
+    /** Video auto-play status */
     private boolean shouldAutoPlay;
+    /** Video Bandwidth */
     private BandwidthMeter bandwidthMeter;
 
+
+    //--------------------------------------------------------------------------------|
+    //                                 Constructor                                    |
+    //--------------------------------------------------------------------------------|
+
     public RecipeStepVideoDetailViewFragment() { }
+
+
+    //--------------------------------------------------------------------------------|
+    //                              Override Methods                                  |
+    //--------------------------------------------------------------------------------|
 
     @Nullable
     @Override
@@ -174,6 +203,15 @@ public class RecipeStepVideoDetailViewFragment extends Fragment {
     }
 
 
+    //--------------------------------------------------------------------------------|
+    //                               Private Methods                                  |
+    //--------------------------------------------------------------------------------|
+
+    /**
+     * Loads a video media content.
+     *
+     * @param extractorsFactory
+     */
     private void loadVideoMediaFile(final DefaultExtractorsFactory extractorsFactory) {
         long delayMillis = 100;
         // 1. Check video-url is not empty and is video content (mp4 and 3gp supported videos)
@@ -213,6 +251,9 @@ public class RecipeStepVideoDetailViewFragment extends Fragment {
     //                            ExoPlayer Methods                                   |
     //--------------------------------------------------------------------------------|
 
+    /**
+     * Initialize Video Player.
+     */
     private void initializePlayer() {
 
         mVideoNotAvailableImageView.setVisibility(View.GONE);
@@ -236,6 +277,9 @@ public class RecipeStepVideoDetailViewFragment extends Fragment {
 
     }
 
+    /**
+     * Release Video Player.
+     */
     private void releasePlayer() {
         if (player != null) {
             shouldAutoPlay = player.getPlayWhenReady();
@@ -245,12 +289,21 @@ public class RecipeStepVideoDetailViewFragment extends Fragment {
         }
     }
 
+    /**
+     * Handles Video-URL (checks if url contains a valid video media file).
+     *
+     * @param url   URL Media content
+     * @return      Valid URL video file
+     */
     private String handleVideoURL(String url) {
         if(TextUtils.isEmpty(url)) { return null; }
         if (url.contains(".mp4") || url.contains(".3gp")) { return url; }
         return null;
     }
 
+    /**
+     * Handles the loading of the Video Thumbnail
+     */
     private void handleVideoThumbnail() {
         String thumbnailURL = mRecipeStep.getThumbnailURL();
         if (!TextUtils.isEmpty(thumbnailURL)) {

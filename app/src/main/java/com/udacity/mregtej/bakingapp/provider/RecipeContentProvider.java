@@ -23,19 +23,32 @@ import java.util.List;
 
 public class RecipeContentProvider extends ContentProvider {
 
+    //--------------------------------------------------------------------------------|
+    //                                 Constants                                      |
+    //--------------------------------------------------------------------------------|
+
     /** The match code for some items in the Recipe table. */
     private static final int CODE_RECIPE_DIR = 1;
 
     /** The match code for a recipe in the Recipe table. */
     private static final int CODE_RECIPE_ITEM = 2;
 
+
+    //--------------------------------------------------------------------------------|
+    //                                 Parameters                                     |
+    //--------------------------------------------------------------------------------|
+
     /** The URI matcher. */
     private static final UriMatcher MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
-
     static {
         MATCHER.addURI(RecipeContract.AUTHORITY, RecipeContract.RecipeEntry.TABLE_NAME, CODE_RECIPE_DIR);
         MATCHER.addURI(RecipeContract.AUTHORITY, RecipeContract.RecipeEntry.TABLE_NAME + "/#", CODE_RECIPE_ITEM);
     }
+
+
+    //--------------------------------------------------------------------------------|
+    //                              Override Methods                                  |
+    //--------------------------------------------------------------------------------|
 
     @Override
     public boolean onCreate() {

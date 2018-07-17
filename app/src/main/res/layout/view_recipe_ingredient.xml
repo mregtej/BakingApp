@@ -2,19 +2,17 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="40dp"
-    android:layout_margin="1dp"
+    android:layout_height="@dimen/view_recipe_ingredient_height"
+    android:layout_margin="@dimen/view_recipe_ingredient_margin"
     android:background="@drawable/dr_rectangle">
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:id="@+id/iv_ingredient_icon"
+        android:layout_width="@dimen/view_recipe_ingredient_icon_height"
+        android:layout_height="@dimen/view_recipe_ingredient_icon_height"
+        android:layout_marginVertical="@dimen/view_recipe_ingredient_icon_marginVertical"
+        android:layout_marginStart="@dimen/view_recipe_ingredient_icon_marginStart"
         android:contentDescription="@string/recipe_ingredient_content_description"
         android:src="@mipmap/ic_ingredient"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -25,16 +23,16 @@
         android:id="@+id/tv_ingredient_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="32dp"
+        android:layout_marginEnd="@dimen/view_recipe_ingredient_name_marginEnd"
+        android:layout_marginStart="@dimen/view_recipe_ingredient_name_marginStart"
         android:fontFamily="sans-serif"
         android:maxLines="2"
         android:text="@string/ingredient_name"
         android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_ingredient_icon"
         app:layout_constraintEnd_toStartOf="@+id/tv_ingredient_quantity"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toTopOf="@+id/imageView" />
+        app:layout_constraintStart_toEndOf="@+id/iv_ingredient_icon"
+        app:layout_constraintTop_toTopOf="@+id/iv_ingredient_icon" />
 
     <TextView
         android:id="@+id/tv_ingredient_quantity"

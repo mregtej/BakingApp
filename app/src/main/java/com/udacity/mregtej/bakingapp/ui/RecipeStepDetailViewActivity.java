@@ -25,22 +25,46 @@ import butterknife.ButterKnife;
 public class RecipeStepDetailViewActivity extends AppCompatActivity
         implements RecipeStepDataDetailViewFragment.ChangeRecipeStepClickListener {
 
+    //--------------------------------------------------------------------------------|
+    //                                 Constants                                      |
+    //--------------------------------------------------------------------------------|
+
+    /** Key for storing the recipe name in savedInstanceState */
     private static final String RECIPE_NAME_SAVED_INST = "recipe-name";
+    /** Key for storing the recipe steps in savedInstanceState */
     private static final String RECIPE_STEPS_SAVED_INST = "recipe-step";
+    /** Key for storing the recipe step position in savedInstanceState */
     private static final String RECIPE_STEP_POSITION_SAVED_INST = "recipe-step-position";
 
+    /** Key for storing the recipe name in Intent.Extras (Bundle) */
     private static final String RECIPE_NAME_EXTRA = "recipe-name";
+    /** Key for storing the recipe steps in Intent.Extras (Bundle) */
     private static final String RECIPE_STEPS_EXTRA = "recipe-step";
+    /** Key for storing the recipe step position in Intent.Extras (Bundle) */
     private static final String RECIPE_STEP_POSITION_EXTRA = "recipe-step-position";
 
+
+    //--------------------------------------------------------------------------------|
+    //                                 Parameters                                     |
+    //--------------------------------------------------------------------------------|
+
+    /** List of Recipe Steps */
     private ArrayList<Step> mRecipeSteps;
+    /** Visible position of Recipe Step */
     private int mRecipeStepPosition;
+    /** Recipe Name */
     private String mRecipeName;
-
+    /** App ActionBar */
     private ActionBar mActionBar;
-
+    /** Recipe Step Data Fragment */
     private RecipeStepDataDetailViewFragment mRecipeStepDataDetailViewFragment;
+    /** Recipe Step Video Fragment */
     private RecipeStepVideoDetailViewFragment mRecipeStepVideoDetailViewFragment;
+
+
+    //--------------------------------------------------------------------------------|
+    //                              Override Methods                                  |
+    //--------------------------------------------------------------------------------|
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -106,6 +130,14 @@ public class RecipeStepDetailViewActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+
+    //--------------------------------------------------------------------------------|
+    //                               Private Methods                                  |
+    //--------------------------------------------------------------------------------|
+
+    /**
+     * Sets Full Screen Mode (Video)
+     */
     private void setFullScreenMode() {
         switch(getResources().getConfiguration().orientation) {
             case Configuration.ORIENTATION_LANDSCAPE:
@@ -119,6 +151,9 @@ public class RecipeStepDetailViewActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Populates RecipeStep UI Fragment elements.
+     */
     private void populateUIFragments() {
 
         mRecipeStepVideoDetailViewFragment = (RecipeStepVideoDetailViewFragment)
@@ -145,6 +180,11 @@ public class RecipeStepDetailViewActivity extends AppCompatActivity
         }
 
     }
+
+
+    //--------------------------------------------------------------------------------|
+    //                           Fragment --> Activity Comm                           |
+    //--------------------------------------------------------------------------------|
 
     @Override
     public void onClickNextRecipeStep() {

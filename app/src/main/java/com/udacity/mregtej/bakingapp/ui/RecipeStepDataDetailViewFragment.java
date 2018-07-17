@@ -20,20 +20,44 @@ import butterknife.ButterKnife;
 
 public class RecipeStepDataDetailViewFragment extends Fragment {
 
-    private Context mContext;
+    //--------------------------------------------------------------------------------|
+    //                                 Constants                                      |
+    //--------------------------------------------------------------------------------|
 
+    /** Key for storing the recipe steps in savedInstanceState */
     private static final String RECIPE_STEPS_SAVED_INSTANCE = "recipe-step";
 
+
+    //--------------------------------------------------------------------------------|
+    //                                 Parameters                                     |
+    //--------------------------------------------------------------------------------|
+
+    /** Activity Context */
+    private Context mContext;
+    /** Recipe (ModelData) */
     private Step mRecipeStep;
-
+    /** Change Recipe Step (next/previous step) onClickListener */
     private ChangeRecipeStepClickListener mChangeRecipeStepClickListener;
-
+    /** Recipe Short Description TextView */
     @BindView(R.id.tv_recipe_step_short_description) TextView mRecipeStepShortDescription;
+    /** Recipe Full Description TextView */
     @BindView(R.id.tv_recipe_step_full_description) TextView mRecipeStepFullDescription;
+    /** Recipe Next Step Button */
     @BindView(R.id.bt_next_recipe_step) TextView mRecipeNextStepButton;
+    /** Recipe Previous Step Button */
     @BindView(R.id.bt_previous_recipe_step) TextView mRecipePreviousStepButton;
 
+
+    //--------------------------------------------------------------------------------|
+    //                                 Constructor                                    |
+    //--------------------------------------------------------------------------------|
+
     public RecipeStepDataDetailViewFragment() { }
+
+
+    //--------------------------------------------------------------------------------|
+    //                              Override Methods                                  |
+    //--------------------------------------------------------------------------------|
 
     @Nullable
     @Override
@@ -116,6 +140,9 @@ public class RecipeStepDataDetailViewFragment extends Fragment {
     //                        Activity --> Fragment Comm                              |
     //--------------------------------------------------------------------------------|
 
+    /**
+     * Update UI Fragment elements
+     */
     public void updateUI() {
         if(TextUtils.isEmpty(mRecipeStep.getShortDescription())) {
             mRecipeStepShortDescription.setText(getString(R.string.empty_description));

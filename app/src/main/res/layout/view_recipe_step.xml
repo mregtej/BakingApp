@@ -2,20 +2,17 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
-    android:layout_margin="1dp"
+    android:layout_height="@dimen/view_recipe_step_height"
+    android:layout_margin="@dimen/view_recipe_step_margin"
     android:background="@drawable/dr_rectangle">
 
     <ImageView
         android:id="@+id/iv_recipe_step_icon"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="@dimen/view_recipe_step_icon_height"
+        android:layout_height="@dimen/view_recipe_step_icon_height"
+        android:layout_marginVertical="@dimen/view_recipe_step_icon_marginVertical"
+        android:layout_marginHorizontal="@dimen/view_recipe_step_icon_marginHorizontal"
         android:src="@mipmap/ic_recipe_step"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tv_recipe_step_number"
@@ -24,9 +21,9 @@
 
     <TextView
         android:id="@+id/tv_recipe_step_number"
-        android:layout_width="40dp"
+        android:layout_width="@dimen/view_recipe_step_number_width"
         android:layout_height="wrap_content"
-        android:layout_marginStart="14dp"
+        android:layout_marginStart="@dimen/view_recipe_step_number_marginStart"
         android:fontFamily="sans-serif"
         android:gravity="center_horizontal"
         android:maxLines="1"
@@ -40,10 +37,7 @@
         android:id="@+id/tv_recipe_step_description"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_margin="@dimen/view_recipe_step_description_margin"
         android:fontFamily="sans-serif"
         android:gravity="center_vertical"
         android:maxLines="2"
@@ -56,9 +50,9 @@
 
     <ImageView
         android:id="@+id/iv_forward_recipe_step"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_marginEnd="8dp"
+        android:layout_width="@dimen/view_recipe_step_forward_recipe_step_width"
+        android:layout_height="@dimen/view_recipe_step_forward_recipe_step_width"
+        android:layout_marginEnd="@dimen/view_recipe_step_forward_recipe_step_marginEnd"
         android:src="@mipmap/ic_forward"
         app:layout_constraintBottom_toBottomOf="@+id/iv_recipe_step_icon"
         app:layout_constraintEnd_toEndOf="parent"

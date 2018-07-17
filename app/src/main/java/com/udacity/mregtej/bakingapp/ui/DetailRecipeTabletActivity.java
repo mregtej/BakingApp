@@ -13,20 +13,42 @@ public class DetailRecipeTabletActivity extends AppCompatActivity
         implements RecipeStepDataDetailViewFragment.ChangeRecipeStepClickListener,
         DetailRecipeStepsFragment.RecipeStepClickListener {
 
-    private DetailRecipeIngredientsFragment mDetailRecipeIngredientsFragment;
-    private DetailRecipeStepsFragment mDetailRecipeStepsFragment;
+    //--------------------------------------------------------------------------------|
+    //                                 Constants                                      |
+    //--------------------------------------------------------------------------------|
 
-    private RecipeStepDataDetailViewFragment mRecipeStepDataDetailViewFragment;
-    private RecipeStepVideoDetailViewFragment mRecipeStepVideoDetailViewFragment;
-
+    /** Key for storing the recipe in savedInstanceState */
     private static final String RECIPE_SAVED_INST = "recipe";
+    /** Key for storing the recipe step position in savedInstanceState */
     private static final String RECIPE_STEP_POSITION_SAVED_INST = "recipe-step-position";
 
+    /** Key for storing the recipe in Intent.Extras (Bundle) */
     private static final String RECIPE_EXTRA = "recipe";
 
+
+    //--------------------------------------------------------------------------------|
+    //                                 Parameters                                     |
+    //--------------------------------------------------------------------------------|
+
+    /** Recipe Ingredients Fragment */
+    private DetailRecipeIngredientsFragment mDetailRecipeIngredientsFragment;
+    /** Recipe Steps Fragment */
+    private DetailRecipeStepsFragment mDetailRecipeStepsFragment;
+    /** Recipe Step Data Fragment */
+    private RecipeStepDataDetailViewFragment mRecipeStepDataDetailViewFragment;
+    /** Recipe Step Video Fragment */
+    private RecipeStepVideoDetailViewFragment mRecipeStepVideoDetailViewFragment;
+    /** Recipe (DataModel) */
     private Recipe mRecipe;
+    /** App ActionBar */
     private ActionBar mActionBar;
+    /** Recipe Step Position */
     private int mRecipeStepPosition;
+
+
+    //--------------------------------------------------------------------------------|
+    //                                 Override Methods                               |
+    //--------------------------------------------------------------------------------|
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +95,14 @@ public class DetailRecipeTabletActivity extends AppCompatActivity
         super.onSaveInstanceState(outState);
     }
 
+
+    //--------------------------------------------------------------------------------|
+    //                               Private Methods                                  |
+    //--------------------------------------------------------------------------------|
+
+    /**
+     * Populates all UI Fragments.
+     */
     private void populateUIFragments() {
 
         mDetailRecipeIngredientsFragment = (DetailRecipeIngredientsFragment)
@@ -108,6 +138,11 @@ public class DetailRecipeTabletActivity extends AppCompatActivity
         }
 
     }
+
+
+    //--------------------------------------------------------------------------------|
+    //                           Fragment --> Activity Comm                           |
+    //--------------------------------------------------------------------------------|
 
     @Override
     public void onClickNextRecipeStep() {

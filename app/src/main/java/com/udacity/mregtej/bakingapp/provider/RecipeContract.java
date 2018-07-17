@@ -33,10 +33,10 @@ public class RecipeContract {
     /** Invalid Recipe servings */
     public static final int INVALID_RECIPE_SERVINGS = -1;
 
-    /* TaskEntry is an inner class that defines the contents of the task table */
+    /* RecipeEntry is an inner class that defines the contents of the Recipe table */
     public static final class RecipeEntry implements BaseColumns {
 
-        // TaskEntry content URI = base content URI + path
+        // Recipe content URI = base content URI + path
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(RECIPE_PATH).build();
 

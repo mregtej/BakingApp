@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="24dp"
+    android:layout_height="@dimen/widget_item_recipe_ingredient_height"
     android:weightSum="100"
-    android:layout_marginHorizontal="4dp"
+    android:layout_marginHorizontal="@dimen/widget_item_recipe_ingredient_marginHorizontal"
     android:background="@drawable/dr_rectangle">
 
     <LinearLayout
@@ -18,10 +16,9 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="12dp"
-            android:layout_height="12dp"
-            android:layout_marginBottom="4dp"
-            android:layout_marginTop="4dp"
+            android:layout_width="@dimen/widget_item_recipe_ingredient_icon_height"
+            android:layout_height="@dimen/widget_item_recipe_ingredient_icon_height"
+            android:layout_marginVertical="@dimen/widget_recipe_name_marginVertical"
             android:layout_gravity="center"
             android:contentDescription="@string/recipe_ingredient_content_description"
             android:src="@mipmap/ic_ingredient_light" />
@@ -41,7 +38,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:maxLines="2"
-            android:paddingHorizontal="2dp"
+            android:paddingHorizontal="@dimen/widget_item_recipe_ingredient_name_paddingHorizontal"
             android:textColor="@android:color/white"
             android:text="@string/ingredient_name"
             android:textSize="9sp" />
@@ -61,7 +58,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:maxLines="2"
-            android:paddingHorizontal="1dp"
+            android:paddingHorizontal="@dimen/widget_item_recipe_ingredient_quantity_paddingHorizontal"
             android:textColor="@android:color/white"
             android:text="@string/ingredient_quantity"
             android:textSize="8sp" />
@@ -81,7 +78,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:maxLines="2"
-            android:paddingHorizontal="1dp"
+            android:paddingHorizontal="@dimen/widget_item_recipe_ingredient_measure_paddingHorizontal"
             android:textColor="@android:color/white"
             android:text="@string/ingredient_quantity"
             android:textSize="8sp" />

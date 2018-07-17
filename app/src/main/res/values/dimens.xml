@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- Fragments Recipe Ingredient and Steps dimens -->
     <dimen name="fragment_ingredients_layout_marginHorizontal">8dp</dimen>
     <dimen name="fragment_recipe_steps_layout_marginHorizontal">8dp</dimen>
     <dimen name="fragment_recipe_steps_layout_marginTop">4dp</dimen>
@@ -8,6 +10,22 @@
     <dimen name="fragment_recipe_step_video_marginTop">10dp</dimen>
     <dimen name="fragment_recipe_step_data_marginHorizontal">8dp</dimen>
     <dimen name="fragment_recipe_step_data_marginVertical">8dp</dimen>
+    <dimen name="fragment_detail_recipe_step_short_description_padding">8dp</dimen>
+    <dimen name="fragment_detail_recipe_step_full_description_marginVertical">8dp</dimen>
+    <dimen name="fragment_detail_recipe_step_full_description_padding">8dp</dimen>
+    <dimen name="fragment_detail_recipe_step_previous_button_marginStart">50dp</dimen>
+    <dimen name="fragment_detail_recipe_step_next_button_marginEnd">50dp</dimen>
+    <dimen name="fragment_recipe_ingredients_title_marginVertical">8dp</dimen>
+    <dimen name="fragment_recipe_ingredients_title_separator_marginTop">4dp</dimen>
+    <dimen name="fragment_recipe_ingredients_expand_collapse_width">30dp</dimen>
+    <dimen name="fragment_recipe_ingredients_expand_collapse_marginEnd">8dp</dimen>
+    <dimen name="fragment_recipe_steps_title_marginVertical">8dp</dimen>
+    <dimen name="fragment_recipe_steps_title_separator_marginTop">4dp</dimen>
+    <dimen name="fragment_recipe_steps_expand_collapse_width">30dp</dimen>
+    <dimen name="fragment_recipe_steps_expand_collapse_marginEnd">8dp</dimen>
+    <dimen name="fragment_recipe_steps_description_recyclerview_paddingBottom">130dp</dimen>
+
+    <!-- Fragments Recipe Ingredient and Steps (Tablet) dimens -->
     <dimen name="fragment_detail_recipe_ingredients_tablet_portrait_width">280dp</dimen>
     <dimen name="fragment_detail_recipe_ingredients_tablet_portrait_marginStart">4dp</dimen>
     <dimen name="fragment_detail_recipe_steps_tablet_portrait_marginVertical">8dp</dimen>
@@ -19,5 +37,48 @@
     <dimen name="fragment_detail_recipe_step_video_tablet_landscape_height">320dp</dimen>
     <dimen name="fragment_detail_recipe_step_data_tablet_landscape_marginTop">8dp</dimen>
     <dimen name="fragment_detail_recipe_step_data_tablet_landscape_marginBottom">4dp</dimen>
+
+    <!-- Recipe card item dimens -->
+    <dimen name="view_recipe_card_height">180dp</dimen>
+    <dimen name="view_recipe_card_margin">10dp</dimen>
+    <dimen name="view_recipe_card_photo_height">140dp</dimen>
+    <dimen name="view_recipe_card_photo_name_height">39dp</dimen>
+    <dimen name="view_recipe_card_photo_name_marginBottom">8dp</dimen>
+
+    <!-- Recipe ingredient item dimens -->
+    <dimen name="view_recipe_ingredient_height">40dp</dimen>
+    <dimen name="view_recipe_ingredient_margin">1dp</dimen>
+    <dimen name="view_recipe_ingredient_icon_height">24dp</dimen>
+    <dimen name="view_recipe_ingredient_icon_marginVertical">8dp</dimen>
+    <dimen name="view_recipe_ingredient_icon_marginStart">16dp</dimen>
+    <dimen name="view_recipe_ingredient_name_marginStart">32dp</dimen>
+    <dimen name="view_recipe_ingredient_name_marginEnd">8dp</dimen>
+    <dimen name="view_recipe_ingredient_quantity_width">60dp</dimen>
+    <dimen name="view_recipe_ingredient_quantity_marginEnd">8dp</dimen>
+
+    <!-- Recipe step item dimens -->
+    <dimen name="view_recipe_step_height">60dp</dimen>
+    <dimen name="view_recipe_step_margin">1dp</dimen>
+    <dimen name="view_recipe_step_icon_height">40dp</dimen>
+    <dimen name="view_recipe_step_icon_marginVertical">8dp</dimen>
+    <dimen name="view_recipe_step_icon_marginHorizontal">16dp</dimen>
+    <dimen name="view_recipe_step_number_width">40dp</dimen>
+    <dimen name="view_recipe_step_number_marginStart">14dp</dimen>
+    <dimen name="view_recipe_step_description_margin">8dp</dimen>
+    <dimen name="view_recipe_step_forward_recipe_step_width">36dp</dimen>
+    <dimen name="view_recipe_step_forward_recipe_step_marginEnd">8dp</dimen>
+
+    <!-- Widget dimens -->
     <dimen name="widget_margin">8dp</dimen>
+    <dimen name="widget_recipe_name_marginVertical">8dp</dimen>
+    <dimen name="widget_recipe_ingredients_verticalSpacing">1dp</dimen>
+    <dimen name="widget_recipe_empty_ingredients_marginVertical">8dp</dimen>
+    <dimen name="widget_item_recipe_ingredient_height">24dp</dimen>
+    <dimen name="widget_item_recipe_ingredient_marginHorizontal">4dp</dimen>
+    <dimen name="widget_item_recipe_ingredient_icon_height">12dp</dimen>
+    <dimen name="widget_item_recipe_ingredient_icon_marginVertical">4dp</dimen>
+    <dimen name="widget_item_recipe_ingredient_name_paddingHorizontal">2dp</dimen>
+    <dimen name="widget_item_recipe_ingredient_quantity_paddingHorizontal">1dp</dimen>
+    <dimen name="widget_item_recipe_ingredient_measure_paddingHorizontal">1dp</dimen>
+
 </resources>

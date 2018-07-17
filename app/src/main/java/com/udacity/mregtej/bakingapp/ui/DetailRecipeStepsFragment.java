@@ -29,36 +29,62 @@ import butterknife.ButterKnife;
 public class DetailRecipeStepsFragment extends Fragment
         implements RecipeStepAdapter.RecipeStepClickListener {
 
+    //--------------------------------------------------------------------------------|
+    //                                 Constants                                      |
+    //--------------------------------------------------------------------------------|
+
+    /** Key for storing the list state in savedInstanceState */
     private static final String LIST_STATE_SAVED_INST = "list-state";
+    /** Key for storing the recipe steps in savedInstanceState */
     private static final String RECIPE_STEPS_SAVED_INST = "recipe-steps";
+    /** Key for storing the expand/collapse recipe step GridView state in savedInstanceState */
     private static final String RECIPE_STEPS_EXPANDED_SAVED_INST = "is-steps-expanded";
 
+    /** Key for storing the recipe name in Intent.Extras (Bundle) */
     private static final String RECIPE_NAME_EXTRA = "recipe-name";
+    /** Key for storing the recipe step in Intent.Extras (Bundle) */
     private static final String RECIPE_STEP_EXTRA = "recipe-step";
+    /** Key for storing the recipe step position in Intent.Extras (Bundle) */
     private static final String RECIPE_STEP_POSITION_EXTRA = "recipe-step-position";
 
-    private boolean isStepsRecyclerViewExpanded;
+    //--------------------------------------------------------------------------------|
+    //                                 Parameters                                     |
+    //--------------------------------------------------------------------------------|
 
     /** RecyclerView LayoutManager instance */
     private RecyclerView.LayoutManager mRecipeStepsLayoutManager;
     /** List state stored in savedInstanceState */
     private Parcelable mListState;
-    /** Recipe Ingredients Custom ArrayAdapter */
+    /** Recipe Steps Custom ArrayAdapter */
     private RecipeStepAdapter mRecipeStepsAdapter;
-    /** Custom Recipe Card GridView (RecyclerView) */
+    /** Custom Recipe Step GridView (RecyclerView) */
     @BindView(R.id.recipe_step_description_recyclerview) RecyclerView mRecipeStepsRecyclerView;
+    /** Expand/Collapse Recipe Step GridView Button */
     @BindView(R.id.ib_expand_collapse_steps_rv) ImageView mCollapseStepsImageView;
     /** Activity Context */
     private Context mContext;
-
+    /** Recipe expandable/collapse GridView status */
+    private boolean isStepsRecyclerViewExpanded;
+    /** Recipe name*/
     private String mRecipeName;
-
+    /** Fragment rootView */
     private View rootView;
+    /** Flag for identifying a tablet device */
     private boolean tabletSize;
-
+    /** Recipe Step onClickListener */
     private RecipeStepClickListener mRecipeStepClickListener;
 
+
+    //--------------------------------------------------------------------------------|
+    //                                 Constructor                                    |
+    //--------------------------------------------------------------------------------|
+
     public DetailRecipeStepsFragment() { }
+
+
+    //--------------------------------------------------------------------------------|
+    //                              Override Methods                                  |
+    //--------------------------------------------------------------------------------|
 
     @Nullable
     @Override
@@ -139,6 +165,11 @@ public class DetailRecipeStepsFragment extends Fragment
         }
     }
 
+
+    //--------------------------------------------------------------------------------|
+    //                               Getters/Setters                                  |
+    //--------------------------------------------------------------------------------|
+
     public void setmRecipeName(String mRecipeName) {
         this.mRecipeName = mRecipeName;
     }
@@ -153,6 +184,16 @@ public class DetailRecipeStepsFragment extends Fragment
         mRecipeStepsAdapter.notifyDataSetChanged();
     }
 
+
+    //--------------------------------------------------------------------------------|
+    //                                 Public Methods                                 |
+    //--------------------------------------------------------------------------------|
+
+    /**
+     * Set Recipe Step RecyclerView visibility.
+     *
+     * @param isExpanded        RecyclerView¨s expand/collapse state
+     */
     public void setRecyclerViewVisibility(boolean isExpanded) {
         if(isExpanded) {
             ViewUtils.expandView(mRecipeStepsRecyclerView);
@@ -187,6 +228,11 @@ public class DetailRecipeStepsFragment extends Fragment
         mRecipeStepsRecyclerView.setLayoutManager(mRecipeStepsLayoutManager);
     }
 
+
+    //--------------------------------------------------------------------------------|
+    //                            Adapter --> Fragment Comm                           |
+    //--------------------------------------------------------------------------------|
+
     @Override
     public void onRecipeStepClick(int position) {
         if(tabletSize) {
@@ -205,6 +251,17 @@ public class DetailRecipeStepsFragment extends Fragment
         }
     }
 
+
+    //--------------------------------------------------------------------------------|
+    //                                Private Methods                                 |
+    //--------------------------------------------------------------------------------|
+
+    /**
+     * Checks coherency of recipe steps (in order, no missing ones,...).
+     *
+     * @param recipeSteps   List of recipe steps - List<Step>
+     * @return              List of adapted recipe steps - List<Step>
+     */
     private List<Step> checkRecipeStepsConsistency(List<Step> recipeSteps) {
         ArrayList<Step> wellFormatedRecipeSteps = new ArrayList<>();
         int idKeyCounter = 0;
@@ -225,6 +282,9 @@ public class DetailRecipeStepsFragment extends Fragment
         return wellFormatedRecipeSteps;
     }
 
+    /**
+     * Adapt the onClickListeners according to RecyclerView¨s expand/collapse state.
+     */
     private void setCollapseViewClickListeners() {
 
         // Set Expand/Collapse OnClick action for Steps RecyclerView
@@ -243,6 +303,9 @@ public class DetailRecipeStepsFragment extends Fragment
 
     }
 
+    /**
+     * Update the UIs according to the expand/collapse state.
+     */
     private void updateStatusCollapseView() {
         // Handle expansion / collapse of RecyclerViews
         if(isStepsRecyclerViewExpanded) {
@@ -251,6 +314,10 @@ public class DetailRecipeStepsFragment extends Fragment
             mCollapseStepsImageView.setImageResource(R.mipmap.ic_expand);
         }
     }
+
+    //--------------------------------------------------------------------------------|
+    //                             Fragment --> Activity Comm                         |
+    //--------------------------------------------------------------------------------|
 
     public interface RecipeStepClickListener {
         public void onRecipeStepClick(int position);

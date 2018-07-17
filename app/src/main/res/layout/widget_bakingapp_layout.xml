@@ -14,7 +14,7 @@
         android:fontFamily="sans-serif"
         android:gravity="center_horizontal"
         android:textStyle="bold"
-        android:layout_marginVertical="8dp"
+        android:layout_marginVertical="@dimen/widget_recipe_name_marginVertical"
         android:textColor="@android:color/white"
         style="@android:style/TextAppearance.Medium"
         android:text="@string/recipe_title"/>
@@ -23,7 +23,7 @@
         android:id="@+id/gv_widget_recipe_ingredients"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:verticalSpacing="4dp"
+        android:verticalSpacing="@dimen/widget_recipe_ingredients_verticalSpacing"
         android:numColumns="1"/>
     
     <RelativeLayout
@@ -39,7 +39,7 @@
             android:fontFamily="sans-serif"
             android:gravity="center_horizontal"
             android:textStyle="bold"
-            android:layout_marginVertical="8dp"
+            android:layout_marginVertical="@dimen/widget_recipe_empty_ingredients_marginVertical"
             android:textColor="@android:color/white"
             style="@android:style/TextAppearance.Medium"
             android:text="@string/empty_ingredient"/>
