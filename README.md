@@ -25,3 +25,17 @@
 
 <h2>Sample Mocks</h2>
 <p><a href="https://go.udacity.com/android-baking-app-mocks-pdf">Available here</p>
+  
+<h2>Screenshots</h2>
+<img src="screenshots/Screenshot_20180717-211628.png" width="150">
+<img src="screenshots/Screenshot_20180717-211634.png" width="150">
+<img src="screenshots/Screenshot_20180717-211638.png" width="150">
+<img src="screenshots/Screenshot_20180717-211647.png" width="150">
+<img src="screenshots/Screenshot_20180717-211735.png" width="150">
+<img src="screenshots/Screenshot_20180717-211709.png" width="250">
+<img src="screenshots/Screenshot_20180717-211712.png" width="250">
+<img src="screenshots/Screenshot_20180717-211716.png" width="250">
+<img src="screenshots/Screenshot_1531851680.png" width="375">
+<img src="screenshots/Screenshot_1531851774.png" width="375">
+<img src="screenshots/Screenshot_1530119310.png" width="375">
+<img src="screenshots/Screenshot_1531851797.png" width="375">
